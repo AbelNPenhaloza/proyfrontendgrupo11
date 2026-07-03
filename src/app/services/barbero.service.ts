@@ -52,4 +52,13 @@ export class BarberoService {
       })
     );
   }
+
+  /**
+   * Elimina un barbero por su ID.
+   * @param id - UUID del barbero
+   * @returns Observable con la respuesta del servidor
+   */
+  deleteBarbero(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

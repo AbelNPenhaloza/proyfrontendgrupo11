@@ -72,7 +72,7 @@ export class ServiciosTable implements OnInit, AfterViewInit {
    * @param servicio - Servicio a editar
    */
   editarServicio(servicio: Servicio) {
-    console.log('Editar servicio:', servicio.servicio_id);
+    alert(`La pantalla para editar el servicio "${servicio.nombre}" está en desarrollo.`);
   }
 
   /**
@@ -80,7 +80,20 @@ export class ServiciosTable implements OnInit, AfterViewInit {
    * @param servicio - Servicio a eliminar
    */
   eliminarServicio(servicio: Servicio) {
-    console.log('Eliminar servicio:', servicio.servicio_id);
+    if (confirm(`¿Estás seguro que deseas eliminar el servicio "${servicio.nombre}"?`)) {
+      this.servicioService.deleteServicio(servicio.servicio_id).subscribe({
+        next: () => {
+          this.servicios = this.servicios.filter(s => s.servicio_id !== servicio.servicio_id);
+          this.cdr.detectChanges();
+          this.inicializarDataTable();
+          alert('Servicio eliminado con éxito.');
+        },
+        error: (err) => {
+          console.error('Error al eliminar servicio:', err);
+          alert('Hubo un error al eliminar el servicio. Puede estar asociado a turnos existentes.');
+        }
+      });
+    }
   }
 
   /** Exporta el listado de servicios a archivo PDF */

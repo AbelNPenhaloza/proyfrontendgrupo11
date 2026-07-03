@@ -39,4 +39,13 @@ export class ServicioService {
       map(servicios => servicios.filter(s => s.activo))
     );
   }
+
+  /**
+   * Elimina un servicio por su ID.
+   * @param id - UUID del servicio
+   * @returns Observable con la respuesta del servidor
+   */
+  deleteServicio(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

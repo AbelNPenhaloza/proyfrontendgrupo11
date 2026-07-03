@@ -81,4 +81,13 @@ export class TurnoService {
       map(turnos => turnos.filter(t => t.fecha === hoy))
     );
   }
+
+  /**
+   * Elimina un turno por su ID.
+   * @param id - UUID del turno
+   * @returns Observable con la respuesta del servidor
+   */
+  deleteTurno(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

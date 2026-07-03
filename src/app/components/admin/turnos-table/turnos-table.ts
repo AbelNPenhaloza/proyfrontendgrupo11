@@ -87,7 +87,7 @@ export class TurnosTable implements OnInit, AfterViewInit {
    * @param turno - Turno a editar
    */
   editarTurno(turno: Turno) {
-    console.log('Editar turno:', turno.turno_id);
+    alert(`La pantalla para editar el turno de ${turno.nombreCliente} está en desarrollo.`);
   }
 
   /**
@@ -95,7 +95,20 @@ export class TurnosTable implements OnInit, AfterViewInit {
    * @param turno - Turno a eliminar
    */
   eliminarTurno(turno: Turno) {
-    console.log('Eliminar turno:', turno.turno_id);
+    if (confirm(`¿Estás seguro que deseas eliminar el turno de ${turno.nombreCliente}?`)) {
+      this.turnoService.deleteTurno(turno.turno_id).subscribe({
+        next: () => {
+          this.turnos = this.turnos.filter(t => t.turno_id !== turno.turno_id);
+          this.cdr.detectChanges();
+          this.inicializarDataTable();
+          alert('Turno eliminado con éxito.');
+        },
+        error: (err) => {
+          console.error('Error al eliminar turno:', err);
+          alert('Hubo un error al eliminar el turno. Es posible que ya tenga pagos asociados.');
+        }
+      });
+    }
   }
 
   /** Exporta el listado de turnos a archivo PDF */

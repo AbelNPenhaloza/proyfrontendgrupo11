@@ -52,4 +52,13 @@ export class UsuarioService {
       map(users => users.length)
     );
   }
+
+  /**
+   * Elimina un usuario por su ID.
+   * @param id - UUID del usuario
+   * @returns Observable con la respuesta del servidor
+   */
+  deleteUsuario(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

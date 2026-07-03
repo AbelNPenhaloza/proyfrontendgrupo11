@@ -89,7 +89,7 @@ export class UsuariosTable implements OnInit, AfterViewInit {
    * @param usuario - Usuario a editar
    */
   editarUsuario(usuario: Usuario) {
-    console.log('Editar usuario:', usuario.usuario_id);
+    alert(`La pantalla para editar al usuario ${usuario.nombre} ${usuario.apellido} está en desarrollo.`);
   }
 
   /**
@@ -97,7 +97,20 @@ export class UsuariosTable implements OnInit, AfterViewInit {
    * @param usuario - Usuario a eliminar
    */
   eliminarUsuario(usuario: Usuario) {
-    console.log('Eliminar usuario:', usuario.usuario_id);
+    if (confirm(`¿Estás seguro que deseas eliminar al usuario ${usuario.nombre} ${usuario.apellido}?`)) {
+      this.usuarioService.deleteUsuario(usuario.usuario_id).subscribe({
+        next: () => {
+          this.usuarios = this.usuarios.filter(u => u.usuario_id !== usuario.usuario_id);
+          this.cdr.detectChanges();
+          this.inicializarDataTable();
+          alert('Usuario eliminado con éxito.');
+        },
+        error: (err) => {
+          console.error('Error al eliminar usuario:', err);
+          alert('Hubo un error al eliminar el usuario.');
+        }
+      });
+    }
   }
 
   /** Exporta el listado de usuarios a archivo PDF */

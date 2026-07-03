@@ -85,7 +85,7 @@ export class BarberosTable implements OnInit, AfterViewInit {
    * @param barbero - Barbero a editar
    */
   editarBarbero(barbero: Barbero) {
-    console.log('Editar barbero:', barbero.barbero_id);
+    alert(`La pantalla para editar al barbero ${barbero.nombre_completo} está en desarrollo.`);
   }
 
   /**
@@ -93,7 +93,23 @@ export class BarberosTable implements OnInit, AfterViewInit {
    * @param barbero - Barbero a eliminar
    */
   eliminarBarbero(barbero: Barbero) {
-    console.log('Eliminar barbero:', barbero.barbero_id);
+    if (confirm(`¿Estás seguro que deseas eliminar al barbero ${barbero.nombre_completo}?`)) {
+      this.barberoService.deleteBarbero(barbero.barbero_id).subscribe({
+        next: () => {
+          // Removemos el barbero de la lista en memoria
+          this.barberos = this.barberos.filter(b => b.barbero_id !== barbero.barbero_id);
+          this.cdr.detectChanges(); // Forzamos a Angular a actualizar el DOM
+          
+          // Re-inicializamos DataTables para que no queden datos "cacheados" visualmente
+          this.inicializarDataTable(); 
+          alert('Barbero eliminado con éxito.');
+        },
+        error: (err) => {
+          console.error('Error al eliminar barbero:', err);
+          alert('Hubo un error al eliminar el barbero. Puede que tenga turnos asociados.');
+        }
+      });
+    }
   }
 
   /** Exporta el listado de barberos a archivo PDF */
