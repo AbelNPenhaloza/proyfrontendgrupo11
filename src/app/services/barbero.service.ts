@@ -61,4 +61,21 @@ export class BarberoService {
   deleteBarbero(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  /**
+   * Crea un nuevo barbero.
+   * @param barbero - Datos del barbero
+   */
+  createBarbero(barbero: any): Observable<any> {
+    return this.http.post(this.apiUrl, barbero);
+  }
+
+  /**
+   * Actualiza un barbero existente.
+   * @param id - UUID del barbero
+   * @param barbero - Nuevos datos
+   */
+  updateBarbero(id: string, barbero: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, barbero);
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { BarberoService } from '../../../services/barbero.service';
 import { ExportService } from '../../../services/export.service';
 import { Barbero } from '../../../models/barbero.model';
@@ -26,6 +26,7 @@ export class BarberosTable implements OnInit, AfterViewInit {
   cargando = true;
 
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   constructor(
     private barberoService: BarberoService,
@@ -85,7 +86,7 @@ export class BarberosTable implements OnInit, AfterViewInit {
    * @param barbero - Barbero a editar
    */
   editarBarbero(barbero: Barbero) {
-    alert(`La pantalla para editar al barbero ${barbero.nombre_completo} está en desarrollo.`);
+    this.router.navigate(['/admin/barberos/editar', barbero.barbero_id]);
   }
 
   /**

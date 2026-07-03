@@ -90,4 +90,21 @@ export class TurnoService {
   deleteTurno(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  /**
+   * Crea un nuevo turno.
+   * @param turno - Datos del turno
+   */
+  createTurno(turno: any): Observable<any> {
+    return this.http.post(this.apiUrl, turno);
+  }
+
+  /**
+   * Actualiza un turno existente.
+   * @param id - UUID del turno
+   * @param turno - Nuevos datos
+   */
+  updateTurno(id: string, turno: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, turno);
+  }
 }

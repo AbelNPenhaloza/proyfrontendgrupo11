@@ -27,6 +27,14 @@ export const routes: Routes = [
         loadComponent: () => import('./components/admin/turnos-table/turnos-table').then(m => m.TurnosTable) 
       },
       { 
+        path: 'turnos/crear', 
+        loadComponent: () => import('./components/admin/turno-form/turno-form').then(m => m.TurnoForm) 
+      },
+      { 
+        path: 'turnos/editar/:id', 
+        loadComponent: () => import('./components/admin/turno-form/turno-form').then(m => m.TurnoForm) 
+      },
+      { 
         path: 'pagos', 
         loadComponent: () => import('./components/admin/pagos-table/pagos-table').then(m => m.PagosTable) 
       },
@@ -37,6 +45,14 @@ export const routes: Routes = [
       { 
         path: 'barberos', 
         loadComponent: () => import('./components/admin/barberos-table/barberos-table').then(m => m.BarberosTable) 
+      },
+      { 
+        path: 'barberos/crear', 
+        loadComponent: () => import('./components/admin/barbero-form/barbero-form').then(m => m.BarberoForm) 
+      },
+      { 
+        path: 'barberos/editar/:id', 
+        loadComponent: () => import('./components/admin/barbero-form/barbero-form').then(m => m.BarberoForm) 
       },
       { 
         path: 'servicios', 

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { TurnoService } from '../../../services/turno.service';
 import { ExportService } from '../../../services/export.service';
 import { Turno } from '../../../models/turno.model';
@@ -26,6 +26,7 @@ export class TurnosTable implements OnInit, AfterViewInit {
   cargando = true;
 
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   constructor(
     private turnoService: TurnoService,
@@ -87,7 +88,7 @@ export class TurnosTable implements OnInit, AfterViewInit {
    * @param turno - Turno a editar
    */
   editarTurno(turno: Turno) {
-    alert(`La pantalla para editar el turno de ${turno.nombreCliente} está en desarrollo.`);
+    this.router.navigate(['/admin/turnos/editar', turno.turno_id]);
   }
 
   /**
