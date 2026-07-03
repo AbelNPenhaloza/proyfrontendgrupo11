@@ -5,7 +5,7 @@ export const routes: Routes = [
   // Rutas públicas
   { 
     path: 'login', 
-    loadComponent: () => import('./components/home/home').then(m => m.Home) 
+    loadComponent: () => import('./components/login/login').then(m => m.Login) 
   },
   { 
     path: 'formulario', 
