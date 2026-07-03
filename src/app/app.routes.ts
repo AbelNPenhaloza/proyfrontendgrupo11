@@ -15,10 +15,37 @@ export const routes: Routes = [
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   { 
     path: 'admin', 
-    loadComponent: () => import('./components/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
-    canActivate: [authGuard] 
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { 
+        path: 'dashboard', 
+        loadComponent: () => import('./components/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) 
+      },
+      { 
+        path: 'turnos', 
+        loadComponent: () => import('./components/admin/turnos-table/turnos-table').then(m => m.TurnosTable) 
+      },
+      { 
+        path: 'pagos', 
+        loadComponent: () => import('./components/admin/pagos-table/pagos-table').then(m => m.PagosTable) 
+      },
+      { 
+        path: 'usuarios', 
+        loadComponent: () => import('./components/admin/usuarios-table/usuarios-table').then(m => m.UsuariosTable) 
+      },
+      { 
+        path: 'barberos', 
+        loadComponent: () => import('./components/admin/barberos-table/barberos-table').then(m => m.BarberosTable) 
+      },
+      { 
+        path: 'servicios', 
+        loadComponent: () => import('./components/admin/servicios-table/servicios-table').then(m => m.ServiciosTable) 
+      }
+    ]
   },
   
   // Redirección por defecto
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];
