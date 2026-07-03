@@ -26,7 +26,7 @@ export class CalendarioTurnos {
     },
     selectable: true,
     // Se ejecuta cuando el usuario selecciona un día
-    dateClick: (info) => {
+    dateClick: (info: any) => {
       this.handleDateClick(info.dateStr);
     }
   };
