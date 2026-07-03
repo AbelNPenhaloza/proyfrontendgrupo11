@@ -1,1 +1,49 @@
-<p>formulario-inscripcion works!</p>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-secondary text-white text-center">
+          <h3>Registro de Usuario</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Nombre</label>
+              <input formControlName="nombre" class="form-control" type="text" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Apellido</label>
+              <input formControlName="apellido" class="form-control" type="text" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input
+                formControlName="email"
+                class="form-control"
+                [class.is-invalid]="
+                  registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+                "
+                type="email"
+                required
+              />
+              @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                <div class="text-danger small">Por favor, ingresa un email válido.</div>
+              }
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <input formControlName="password" class="form-control" type="password" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Celular</label>
+              <input formControlName="celular" class="form-control" type="text" required />
+            </div>
+            <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary w-100">
+              Registrarse
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
