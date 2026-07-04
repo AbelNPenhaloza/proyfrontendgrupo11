@@ -42,12 +42,28 @@ export class TurnoForm implements OnInit {
   };
 
   ngOnInit() {
-    // Cargar listas para los desplegables
-    this.barberoService.getBarberos().subscribe(data => this.barberos = data);
-    this.servicioService.getServicios().subscribe(data => this.servicios = data);
-    this.usuarioService.getUsuarios().subscribe(data => {
-      // Solo mostrar clientes en la lista
-      this.clientes = data;
+    // Cargar listas para los desplegables con manejo de errores y formatos
+    this.barberoService.getBarberos().subscribe({
+      next: (data: any) => {
+        this.barberos = Array.isArray(data) ? data : (data.barberos || data.data || []);
+      },
+      error: (err) => console.error('Error cargando barberos:', err)
+    });
+
+    this.servicioService.getServicios().subscribe({
+      next: (data: any) => {
+        this.servicios = Array.isArray(data) ? data : (data.servicios || data.data || []);
+      },
+      error: (err) => console.error('Error cargando servicios:', err)
+    });
+
+    this.usuarioService.getUsuarios().subscribe({
+      next: (data: any) => {
+        const usuarios = Array.isArray(data) ? data : (data.usuarios || data.data || []);
+        // Solo mostrar los que son clientes, o mostrarlos todos si quieres
+        this.clientes = usuarios;
+      },
+      error: (err) => console.error('Error cargando clientes:', err)
     });
 
     this.turnoId = this.route.snapshot.paramMap.get('id');

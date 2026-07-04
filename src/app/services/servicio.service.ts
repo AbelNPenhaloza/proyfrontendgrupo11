@@ -18,15 +18,18 @@ export class ServicioService {
    * @returns Observable con array completo de servicios desde el backend
    */
   getServicios(): Observable<Servicio[]> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map(servicios => servicios.map(s => ({
-        servicio_id: s.servicio_id,
-        nombre: s.nombre,
-        descripcion: s.descripcion,
-        duracion_minutos: s.duracion_minutos,
-        precio: Number(s.precio),
-        activo: s.activo
-      })))
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(res => {
+        const serviciosArray = Array.isArray(res) ? res : (res.servicios || res.data || []);
+        return serviciosArray.map((s: any) => ({
+          servicio_id: s.servicio_id,
+          nombre: s.nombre,
+          descripcion: s.descripcion,
+          duracion_minutos: s.duracion_minutos,
+          precio: Number(s.precio),
+          activo: s.activo
+        }));
+      })
     );
   }
 
