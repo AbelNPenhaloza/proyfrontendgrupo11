@@ -63,10 +63,11 @@ export class UsuarioService {
   }
 
   /**
-   * Crea un nuevo usuario.
+   * Crea un nuevo usuario mediante la ruta de registro.
    */
   createUsuario(usuario: any): Observable<any> {
-    return this.http.post(this.apiUrl, usuario);
+    const url = `${environment.API_BASE_URL}/auth/register`;
+    return this.http.post(url, usuario);
   }
 
   /**
