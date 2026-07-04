@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { UsuarioService } from '../../../services/usuario.service';
 import { ExportService } from '../../../services/export.service';
 import { Usuario } from '../../../models/usuario.model';
@@ -29,6 +29,7 @@ export class UsuariosTable implements OnInit, AfterViewInit {
   private tablaInicializada = false;
 
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   constructor(
     private usuarioService: UsuarioService,
@@ -89,7 +90,7 @@ export class UsuariosTable implements OnInit, AfterViewInit {
    * @param usuario - Usuario a editar
    */
   editarUsuario(usuario: Usuario) {
-    alert(`La pantalla para editar al usuario ${usuario.nombre} ${usuario.apellido} está en desarrollo.`);
+    this.router.navigate(['/admin/usuarios/editar', usuario.usuario_id]);
   }
 
   /**

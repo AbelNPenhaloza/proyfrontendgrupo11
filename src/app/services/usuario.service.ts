@@ -61,4 +61,25 @@ export class UsuarioService {
   deleteUsuario(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  /**
+   * Crea un nuevo usuario.
+   */
+  createUsuario(usuario: any): Observable<any> {
+    return this.http.post(this.apiUrl, usuario);
+  }
+
+  /**
+   * Actualiza un usuario existente.
+   */
+  updateUsuario(id: string, usuario: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, usuario);
+  }
+
+  /**
+   * Obtiene un usuario por ID.
+   */
+  getUsuarioById(id: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
+  }
 }

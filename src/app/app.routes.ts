@@ -43,6 +43,14 @@ export const routes: Routes = [
         loadComponent: () => import('./components/admin/usuarios-table/usuarios-table').then(m => m.UsuariosTable) 
       },
       { 
+        path: 'usuarios/crear', 
+        loadComponent: () => import('./components/admin/usuario-form/usuario-form').then(m => m.UsuarioForm) 
+      },
+      { 
+        path: 'usuarios/editar/:id', 
+        loadComponent: () => import('./components/admin/usuario-form/usuario-form').then(m => m.UsuarioForm) 
+      },
+      { 
         path: 'barberos', 
         loadComponent: () => import('./components/admin/barberos-table/barberos-table').then(m => m.BarberosTable) 
       },
@@ -57,6 +65,14 @@ export const routes: Routes = [
       { 
         path: 'servicios', 
         loadComponent: () => import('./components/admin/servicios-table/servicios-table').then(m => m.ServiciosTable) 
+      },
+      { 
+        path: 'servicios/crear', 
+        loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm) 
+      },
+      { 
+        path: 'servicios/editar/:id', 
+        loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm) 
       }
     ]
   },

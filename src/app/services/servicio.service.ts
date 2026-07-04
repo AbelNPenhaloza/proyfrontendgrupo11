@@ -48,4 +48,18 @@ export class ServicioService {
   deleteServicio(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  /**
+   * Crea un nuevo servicio.
+   */
+  createServicio(servicio: any): Observable<any> {
+    return this.http.post(this.apiUrl, servicio);
+  }
+
+  /**
+   * Actualiza un servicio existente.
+   */
+  updateServicio(id: string, servicio: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, servicio);
+  }
 }

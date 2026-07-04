@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, inject, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { ServicioService } from '../../../services/servicio.service';
 import { ExportService } from '../../../services/export.service';
 import { Servicio } from '../../../models/servicio.model';
@@ -26,6 +26,7 @@ export class ServiciosTable implements OnInit, AfterViewInit {
   cargando = true;
 
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   constructor(
     private servicioService: ServicioService,
@@ -72,7 +73,7 @@ export class ServiciosTable implements OnInit, AfterViewInit {
    * @param servicio - Servicio a editar
    */
   editarServicio(servicio: Servicio) {
-    alert(`La pantalla para editar el servicio "${servicio.nombre}" está en desarrollo.`);
+    this.router.navigate(['/admin/servicios/editar', servicio.servicio_id]);
   }
 
   /**

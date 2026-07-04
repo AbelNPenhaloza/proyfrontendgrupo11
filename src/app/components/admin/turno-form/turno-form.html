@@ -9,7 +9,7 @@
   <div class="card shadow-sm col-md-8 col-lg-6">
     <div class="card-body p-4">
       <form (ngSubmit)="guardar()" #turnoForm="ngForm">
-        
+
         <div class="mb-3">
           <label class="form-label fw-bold">Fecha</label>
           <input type="date" class="form-control" name="fecha" [(ngModel)]="turno.fecha" required>
@@ -18,12 +18,42 @@
         <div class="row">
           <div class="col-6 mb-3">
             <label class="form-label fw-bold">Hora Inicio</label>
-            <input type="time" class="form-control" name="hora_inicio" [(ngModel)]="turno.hora_inicio" required step="1800">
+            <input type="time" class="form-control" name="hora_inicio" [(ngModel)]="turno.hora_inicio" required>
           </div>
           <div class="col-6 mb-3">
             <label class="form-label fw-bold">Hora Fin</label>
-            <input type="time" class="form-control" name="hora_fin" [(ngModel)]="turno.hora_fin" required step="1800">
+            <input type="time" class="form-control" name="hora_fin" [(ngModel)]="turno.hora_fin" required>
           </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Cliente</label>
+          <select class="form-select" name="cliente_id" [(ngModel)]="turno.cliente_id" required>
+            <option value="" disabled>-- Seleccionar cliente --</option>
+            @for (cliente of clientes; track cliente.usuario_id) {
+              <option [value]="cliente.usuario_id">{{ cliente.nombre }} {{ cliente.apellido }} ({{ cliente.email }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Barbero</label>
+          <select class="form-select" name="barbero_id" [(ngModel)]="turno.barbero_id" required>
+            <option value="" disabled>-- Seleccionar barbero --</option>
+            @for (barbero of barberos; track barbero.barbero_id) {
+              <option [value]="barbero.barbero_id">{{ barbero.nombre_completo }} ({{ barbero.especialidad }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Servicio</label>
+          <select class="form-select" name="servicio_id" [(ngModel)]="turno.servicio_id" required>
+            <option value="" disabled>-- Seleccionar servicio --</option>
+            @for (servicio of servicios; track servicio.servicio_id) {
+              <option [value]="servicio.servicio_id">{{ servicio.nombre }} - ${{ servicio.precio }} ({{ servicio.duracion_minutos }} min)</option>
+            }
+          </select>
         </div>
 
         <div class="mb-3">
@@ -36,24 +66,9 @@
           </select>
         </div>
 
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">ID Cliente (UUID)</label>
-          <input type="text" class="form-control" name="cliente_id" [(ngModel)]="turno.cliente_id" required>
-        </div>
-        
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">ID Barbero (UUID)</label>
-          <input type="text" class="form-control" name="barbero_id" [(ngModel)]="turno.barbero_id" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label fw-bold text-muted">ID Servicio (UUID)</label>
-          <input type="text" class="form-control" name="servicio_id" [(ngModel)]="turno.servicio_id" required>
-        </div>
-
         <div class="mb-4">
-          <label class="form-label fw-bold">Notas del turno</label>
-          <textarea class="form-control" name="notas" [(ngModel)]="turno.notas" rows="2" placeholder="Ej. El cliente pidió que lo atienda Carlos exclusivamente"></textarea>
+          <label class="form-label fw-bold">Notas</label>
+          <textarea class="form-control" name="notas" [(ngModel)]="turno.notas" rows="2" placeholder="Notas opcionales..."></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary w-100 fs-5 shadow-sm" [disabled]="!turnoForm.form.valid || cargando">
