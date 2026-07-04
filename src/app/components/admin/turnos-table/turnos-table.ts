@@ -84,14 +84,6 @@ export class TurnosTable implements OnInit, AfterViewInit {
   }
 
   /**
-   * Navega al formulario de edición del turno.
-   * @param turno - Turno a editar
-   */
-  editarTurno(turno: Turno) {
-    this.router.navigate(['/admin/turnos/editar', turno.turno_id]);
-  }
-
-  /**
    * Elimina un turno tras confirmación del usuario.
    * @param turno - Turno a eliminar
    */

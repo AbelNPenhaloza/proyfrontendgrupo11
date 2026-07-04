@@ -39,15 +39,43 @@ export class UsuariosTable implements OnInit, AfterViewInit {
   /** Carga los usuarios al inicializar el componente */
   ngOnInit() {
     this.usuarioService.getUsuarios().subscribe({
-      next: (data) => {
+      next: (data: any) => {
         console.log('Usuarios recibidos en componente:', data);
-        this.usuarios = data;
+        
+        // Extraer array real y manejar errores silenciosos
+        if (Array.isArray(data)) {
+          this.usuarios = data;
+        } else if (data && data.usuarios) {
+          this.usuarios = data.usuarios;
+        } else if (data && data.data) {
+          this.usuarios = data.data;
+        } else {
+          this.usuarios = [];
+          if (data && data.mensaje) {
+            console.error('Mensaje del servidor:', data.mensaje);
+            alert('Error del servidor: ' + data.mensaje);
+          }
+        }
+        
         this.cargando = false;
+        
+        // Forzar actualización del DOM
         this.cdr.detectChanges();
-        this.inicializarDataTable();
+        
+        // Inicializar tabla de forma segura
+        if (!this.tablaInicializada) {
+          this.inicializarDataTable();
+          this.tablaInicializada = true;
+        } else {
+          const table = ($('#usuariosTable') as any).DataTable();
+          table.destroy();
+          this.cdr.detectChanges();
+          this.inicializarDataTable();
+        }
       },
       error: (err) => {
         console.error('Error al cargar usuarios:', err);
+        alert('Error HTTP al cargar usuarios: ' + (err.error?.mensaje || err.message));
         this.cargando = false;
         this.cdr.detectChanges();
       }
@@ -57,19 +85,17 @@ export class UsuariosTable implements OnInit, AfterViewInit {
   ngAfterViewInit() {}
 
   private inicializarDataTable() {
-    setTimeout(() => {
-      if ($.fn.DataTable.isDataTable('#usuariosTable')) {
-        $('#usuariosTable').DataTable().destroy();
-      }
-      if ($('#usuariosTable').length) {
-        $('#usuariosTable').DataTable({
+    if ($.fn.DataTable.isDataTable('#usuariosTable')) {
+      $('#usuariosTable').DataTable().destroy();
+    }
+    if ($('#usuariosTable').length) {
+      $('#usuariosTable').DataTable({
           responsive: true,
           language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
           pageLength: 10,
           order: [[0, 'asc']]
         });
-      }
-    }, 100);
+    }
   }
 
   /**

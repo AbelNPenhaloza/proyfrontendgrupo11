@@ -24,20 +24,23 @@ export class TurnoForm implements OnInit {
   turnoId: string | null = null;
   esEdicion = false;
   cargando = false;
+  guardado = false;
 
   // Listas para los desplegables
   barberos: any[] = [];
   servicios: any[] = [];
   clientes: any[] = [];
+  
+  // Lista de horarios traída del backend
+  horariosDisponibles: any[] = [];
+  cargandoHorarios = false;
 
   turno: any = {
     fecha: '',
     hora_inicio: '10:00',
-    hora_fin: '10:30',
-    estado: 'PENDIENTE',
-    cliente_id: '',
-    barbero_id: '',
-    servicio_id: '',
+    clienteId: '',
+    barberoId: '',
+    servicioId: '',
     notas: ''
   };
 
@@ -80,32 +83,61 @@ export class TurnoForm implements OnInit {
         this.turno = {
           fecha: encontrado.fecha,
           hora_inicio: encontrado.hora_inicio?.substring(0, 5) || '',
-          hora_fin: encontrado.hora_fin?.substring(0, 5) || '',
-          estado: encontrado.estado,
-          cliente_id: encontrado.cliente_id,
-          barbero_id: encontrado.barbero_id,
-          servicio_id: encontrado.servicio_id,
+          clienteId: encontrado.cliente_id,
+          barberoId: encontrado.barbero_id,
+          servicioId: encontrado.servicio_id,
           notas: encontrado.notas || ''
         };
       }
     });
   }
 
+  /**
+   * Consulta al backend los horarios disponibles según el barbero, servicio y fecha.
+   */
+  cargarHorariosDisponibles() {
+    if (this.turno.barberoId && this.turno.fecha && this.turno.servicioId) {
+      this.cargandoHorarios = true;
+      this.turnoService.getDisponibilidad(this.turno.barberoId, this.turno.fecha, this.turno.servicioId)
+        .subscribe({
+          next: (res) => {
+            this.horariosDisponibles = res.horariosDisponibles || [];
+            this.cargandoHorarios = false;
+            // Si el horario seleccionado previamente ya no está disponible, lo limpiamos
+            if (this.turno.hora_inicio && !this.horariosDisponibles.some(h => h.hora_inicio === this.turno.hora_inicio)) {
+              this.turno.hora_inicio = '';
+            }
+          },
+          error: (err) => {
+            console.error('Error al cargar horarios:', err);
+            this.horariosDisponibles = [];
+            this.cargandoHorarios = false;
+          }
+        });
+    }
+  }
+
   guardar() {
     this.cargando = true;
 
-    // Formatear horas para el backend (HH:mm:ss)
+    // Formatear horas para el backend (HH:mm:ss) y ajustar los nombres de campos
     const datos = {
-      ...this.turno,
-      hora_inicio: this.turno.hora_inicio.length === 5 ? this.turno.hora_inicio + ':00' : this.turno.hora_inicio,
-      hora_fin: this.turno.hora_fin.length === 5 ? this.turno.hora_fin + ':00' : this.turno.hora_fin
+      clienteId: this.turno.clienteId,
+      barberoId: this.turno.barberoId,
+      servicioId: this.turno.servicioId,
+      fecha: this.turno.fecha,
+      hora_inicio: this.turno.hora_inicio,
+      notas: this.turno.notas
     };
 
     if (this.esEdicion) {
       this.turnoService.updateTurno(this.turnoId!, datos).subscribe({
         next: () => {
-          alert('Turno actualizado correctamente');
-          this.router.navigate(['/admin/turnos']);
+          this.guardado = true;
+          this.cargando = false;
+          setTimeout(() => {
+            this.router.navigate(['/admin/turnos']);
+          }, 2000);
         },
         error: (err) => {
           console.error(err);
@@ -116,8 +148,11 @@ export class TurnoForm implements OnInit {
     } else {
       this.turnoService.createTurno(datos).subscribe({
         next: () => {
-          alert('Turno creado correctamente');
-          this.router.navigate(['/admin/turnos']);
+          this.guardado = true;
+          this.cargando = false;
+          setTimeout(() => {
+            this.router.navigate(['/admin/turnos']);
+          }, 2000);
         },
         error: (err) => {
           console.error(err);

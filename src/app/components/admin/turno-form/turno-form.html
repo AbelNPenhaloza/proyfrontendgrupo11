@@ -8,27 +8,18 @@
 
   <div class="card shadow-sm col-md-8 col-lg-6">
     <div class="card-body p-4">
+      @if (guardado) {
+        <div class="text-center py-5">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+          <h2 class="mt-4 text-dark fw-bold">¡Turno Creado Exitosamente!</h2>
+          <p class="text-muted fs-5">Redirigiendo a la lista de turnos...</p>
+        </div>
+      } @else {
       <form (ngSubmit)="guardar()" #turnoForm="ngForm">
 
         <div class="mb-3">
-          <label class="form-label fw-bold">Fecha</label>
-          <input type="date" class="form-control" name="fecha" [(ngModel)]="turno.fecha" required>
-        </div>
-
-        <div class="row">
-          <div class="col-6 mb-3">
-            <label class="form-label fw-bold">Hora Inicio</label>
-            <input type="time" class="form-control" name="hora_inicio" [(ngModel)]="turno.hora_inicio" required>
-          </div>
-          <div class="col-6 mb-3">
-            <label class="form-label fw-bold">Hora Fin</label>
-            <input type="time" class="form-control" name="hora_fin" [(ngModel)]="turno.hora_fin" required>
-          </div>
-        </div>
-
-        <div class="mb-3">
           <label class="form-label fw-bold">Cliente</label>
-          <select class="form-select" name="cliente_id" [(ngModel)]="turno.cliente_id" required>
+          <select class="form-select" name="clienteId" [(ngModel)]="turno.clienteId" required>
             <option value="" disabled>-- Seleccionar cliente --</option>
             @for (cliente of clientes; track cliente.usuario_id) {
               <option [value]="cliente.usuario_id">{{ cliente.nombre }} {{ cliente.apellido }} ({{ cliente.email }})</option>
@@ -38,7 +29,7 @@
 
         <div class="mb-3">
           <label class="form-label fw-bold">Barbero</label>
-          <select class="form-select" name="barbero_id" [(ngModel)]="turno.barbero_id" required>
+          <select class="form-select" name="barberoId" [(ngModel)]="turno.barberoId" (change)="cargarHorariosDisponibles()" required>
             <option value="" disabled>-- Seleccionar barbero --</option>
             @for (barbero of barberos; track barbero.barbero_id) {
               <option [value]="barbero.barbero_id">{{ barbero.nombre_completo }} ({{ barbero.especialidad }})</option>
@@ -48,7 +39,7 @@
 
         <div class="mb-3">
           <label class="form-label fw-bold">Servicio</label>
-          <select class="form-select" name="servicio_id" [(ngModel)]="turno.servicio_id" required>
+          <select class="form-select" name="servicioId" [(ngModel)]="turno.servicioId" (change)="cargarHorariosDisponibles()" required>
             <option value="" disabled>-- Seleccionar servicio --</option>
             @for (servicio of servicios; track servicio.servicio_id) {
               <option [value]="servicio.servicio_id">{{ servicio.nombre }} - ${{ servicio.precio }} ({{ servicio.duracion_minutos }} min)</option>
@@ -57,14 +48,32 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label fw-bold">Estado</label>
-          <select class="form-select" name="estado" [(ngModel)]="turno.estado">
-            <option value="PENDIENTE">Pendiente</option>
-            <option value="CONFIRMADO">Confirmado</option>
-            <option value="ATENDIDO">Atendido</option>
-            <option value="CANCELADO">Cancelado</option>
-          </select>
+          <label class="form-label fw-bold">Fecha</label>
+          <input type="date" class="form-control" name="fecha" [(ngModel)]="turno.fecha" (change)="cargarHorariosDisponibles()" required>
         </div>
+
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label class="form-label fw-bold">Hora Inicio</label>
+            <select class="form-select" name="hora_inicio" [(ngModel)]="turno.hora_inicio" required [disabled]="horariosDisponibles.length === 0 || cargandoHorarios">
+              <option value="" disabled>-- Seleccionar horario disponible --</option>
+              @for (horario of horariosDisponibles; track horario.hora_inicio) {
+                <option [value]="horario.hora_inicio.substring(0,5)">{{ horario.hora_inicio.substring(0,5) }} a {{ horario.hora_fin.substring(0,5) }}</option>
+              }
+            </select>
+            @if (cargandoHorarios) {
+              <small class="text-primary"><i class="bi bi-arrow-repeat spin"></i> Buscando horarios...</small>
+            } @else if (horariosDisponibles.length === 0 && turno.fecha && turno.barberoId && turno.servicioId) {
+              <small class="text-danger">No hay horarios disponibles para esa fecha.</small>
+            } @else if (horariosDisponibles.length === 0) {
+              <small class="text-muted">Seleccioná fecha, barbero y servicio para ver los horarios libres.</small>
+            } @else {
+              <small class="text-success">Horarios cargados correctamente.</small>
+            }
+          </div>
+        </div>
+
+
 
         <div class="mb-4">
           <label class="form-label fw-bold">Notas</label>
@@ -79,6 +88,7 @@
           }
         </button>
       </form>
+      }
     </div>
   </div>
 </div>

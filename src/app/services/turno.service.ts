@@ -107,4 +107,11 @@ export class TurnoService {
   updateTurno(id: string, turno: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, turno);
   }
+
+  /**
+   * Obtiene la disponibilidad de horarios de un barbero para una fecha y servicio específicos.
+   */
+  getDisponibilidad(barberoId: string, fecha: string, servicioId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/disponibilidad?barberoId=${barberoId}&fecha=${fecha}&servicioId=${servicioId}`);
+  }
 }
