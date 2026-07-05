@@ -3,20 +3,42 @@
   --secondary-color: #14213D;  /* Azul Moderno */
   --light-bg: #F4F1DE;         /* Crema Suave */
   --accent-brown: #5C3D2E;     /* Marrón Barbería */
-  --font-main: 'Segoe UI', sans-serif;
+  --font-title: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 body {
   background-color: var(--light-bg);
   color: var(--secondary-color);
-  font-family: var(--font-main);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6, .brand-font {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: all 0.25s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #8c1a15 !important;
+  border-color: #8c1a15 !important;
+  transform: translateY(-1px);
 }
 
 .navbar {
   background-color: var(--secondary-color) !important;
+  font-family: var(--font-body);
+}
+
+.card {
+  border-radius: 12px;
+  border: 1px solid rgba(92, 61, 46, 0.15);
 }

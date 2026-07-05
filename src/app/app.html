@@ -1,18 +1,29 @@
+<!-- Navbar condicional: cambia según el rol pero NO afecta al router-outlet -->
 @if (authService.isAuthenticated() && authService.isAdmin()) {
   <app-navbar></app-navbar>
-  <main class="main-content">
-    <router-outlet />
-  </main>
-} @else {
-  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+} @else if (authService.isAuthenticated()) {
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #14213D; border-bottom: 3px solid #5C3D2E;">
     <div class="container">
-      <a class="navbar-brand" href="#">Barbería 11</a>
-      <div class="navbar-nav">
-        <a class="nav-link" routerLink="/login">Login</a>
-        <a class="nav-link" routerLink="/formulario">Registro</a>
+      <a class="navbar-brand fw-bold" routerLink="/home" style="color: #F4F1DE;">Barbería 11</a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" routerLink="/home" style="color: #F4F1DE; font-weight: 500;">Mis Turnos</a>
+        <a class="nav-link text-danger" style="cursor: pointer; font-weight: bold; color: #A8201A !important;" (click)="logout()">Cerrar sesión</a>
       </div>
     </div>
   </nav>
-  
-  <router-outlet />
+} @else {
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #14213D; border-bottom: 3px solid #5C3D2E;">
+    <div class="container">
+      <a class="navbar-brand fw-bold" routerLink="/login" style="color: #F4F1DE;">Barbería 11</a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" routerLink="/login" style="color: #F4F1DE;">Login</a>
+        <a class="nav-link" routerLink="/formulario" style="color: #F4F1DE;">Registro</a>
+      </div>
+    </div>
+  </nav>
 }
+
+<!-- router-outlet sin ningun @if, siempre presente en el DOM -->
+<div [class.main-content]="authService.isAuthenticated() && authService.isAdmin()">
+  <router-outlet />
+</div>

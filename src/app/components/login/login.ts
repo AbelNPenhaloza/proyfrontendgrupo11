@@ -32,10 +32,7 @@ export class Login {
           if (this.authService.isAdmin()) {
             this.router.navigate(['/admin']);
           } else {
-            //this.router.navigate(['/']); // Ruta principal para el CLIENTE
-            // Opción B: Mensaje temporal para el CLIENTE hasta que el compañero haga el Home
-            alert('¡Login exitoso! Bienvenido (La vista del cliente está en construcción)');
-            this.loginForm.reset(); // Limpiamos el formulario
+            this.router.navigate(['/home']);
           }
         },
         error: (err:any) => {

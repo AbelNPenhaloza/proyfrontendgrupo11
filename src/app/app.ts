@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterOutlet, RouterLink } from '@angular/router';
+import { Router, RouterOutlet, RouterLink } from '@angular/router';
 import { NavbarComponent } from './shared/navbar-admin/navbar';
 import { AuthService } from './services/auth/auth.service';
 
@@ -13,4 +13,10 @@ import { AuthService } from './services/auth/auth.service';
 export class App {
   protected readonly authService = inject(AuthService);
   protected readonly title = signal('frontend');
+  private readonly router = inject(Router);
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

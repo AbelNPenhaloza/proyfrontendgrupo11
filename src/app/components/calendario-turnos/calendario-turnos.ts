@@ -1,21 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import { TurnoService } from '../../services/turno.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { Servicio } from '../../models/servicio.model';
+import { Turno } from '../../models/turno.model';
 
 @Component({
   selector: 'app-calendario-turnos',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FormsModule, FullCalendarModule],
   templateUrl: './calendario-turnos.html',
   styleUrl: './calendario-turnos.css',
 })
-export class CalendarioTurnos {
-  // Configuración del calendario
+export class CalendarioTurnos implements OnInit {
+  private turnoService = inject(TurnoService);
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
+
+  // Listado de servicios y turnos cargados
+  servicios: Servicio[] = [];
+  turnos: Turno[] = [];
+  servicioSeleccionado: Servicio | null = null;
+  mensajeExito: string | null = null;
+  mensajeError: string | null = null;
+
+  // Estado del modal de reserva
+  modalAbierto = false;
+  fechaModal = '';
+  horariosDisponibles: { hora_inicio: string; hora_fin: string }[] = [];
+  horarioSeleccionado: { hora_inicio: string; hora_fin: string } | null = null;
+  cargandoHorarios = false;
+  cargandoReserva = false;
+
+  // Fecha minima: no se puede reservar en el pasado
+  readonly fechaMinima = new Date().toISOString().split('T')[0];
+
+  // Barbero asignado por defecto para las reservas del cliente
+  private readonly BARBERO_ID = 'c1b183ac-1d70-4f51-a968-3e4e672c2196';
+
+  // Opciones de configuración de FullCalendar
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, interactionPlugin],
+    plugins: [dayGridPlugin],
     initialView: 'dayGridMonth',
     locale: 'es',
     firstDay: 1,
@@ -24,15 +53,182 @@ export class CalendarioTurnos {
       center: 'title',
       right: ''
     },
-    selectable: true,
-    // Se ejecuta cuando el usuario selecciona un día
-    dateClick: (info: any) => {
-      this.handleDateClick(info.dateStr);
-    }
+    selectable: false,
+    events: [] // Se poblará dinámicamente con los turnos cargados
   };
 
-  handleDateClick(fechaSeleccionada: string) {
-    // Muestra una alerta sencilla para confirmar la selección
-    alert('Perfecto, seleccionaste el día: ' + fechaSeleccionada + '.\nPróximamente veremos los horarios disponibles aquí.');
+  constructor() {
+    console.log('[CalendarioTurnos] Constructor invocado');
+  }
+
+  ngOnInit(): void {
+    console.log('[CalendarioTurnos] ngOnInit invocado');
+    this.cargarServicios();
+    this.cargarTurnosDelCalendario();
+  }
+
+  /**
+   * Carga el catálogo de servicios desde el backend.
+   */
+  cargarServicios(): void {
+    console.log('[CalendarioTurnos] Iniciando getServicios()...');
+    this.turnoService.getServicios().subscribe({
+      next: (res) => {
+        console.log('[CalendarioTurnos] getServicios() completado. Servicios recibidos:', res);
+        this.servicios = res.filter(s => s.activo);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[CalendarioTurnos] Error en getServicios():', err);
+        this.mensajeError = 'No se pudo cargar el catálogo de servicios.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Obtiene todos los turnos registrados para mostrarlos dinámicamente en el calendario.
+   */
+  cargarTurnosDelCalendario(): void {
+    console.log('[CalendarioTurnos] Cargando turnos para poblar el calendario...');
+    this.turnoService.getTurnos().subscribe({
+      next: (turnosRegistrados) => {
+        this.turnos = turnosRegistrados;
+        
+        // Mapear los turnos al formato que FullCalendar requiere para sus eventos
+        const eventosMapeados = this.turnos
+          .filter(t => t.estado !== 'CANCELADO')
+          .map(t => ({
+            title: t.nombreServicio || 'Turno Reservado',
+            start: `${t.fecha}T${t.hora_inicio}`,
+            end: `${t.fecha}T${t.hora_fin}`,
+            color: '#14213D', // Azul marino oficial
+            textColor: '#F4F1DE', // Arena/Crema oficial para legibilidad
+            borderColor: '#5C3D2E' // Marrón oficial para el borde del evento
+          }));
+
+        // Actualizar las opciones del calendario con los nuevos eventos
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events: eventosMapeados
+        };
+
+        console.log('[CalendarioTurnos] Eventos cargados en el calendario:', eventosMapeados);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[CalendarioTurnos] Error al cargar los turnos del calendario:', err);
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /**
+   * Abre el modal limpio al seleccionar un servicio.
+   */
+  abrirModal(servicio: Servicio): void {
+    console.log('[CalendarioTurnos] Abriendo modal para servicio:', servicio.nombre);
+    this.servicioSeleccionado = servicio;
+    this.modalAbierto = true;
+    this.fechaModal = '';
+    this.horariosDisponibles = [];
+    this.horarioSeleccionado = null;
+    this.mensajeExito = null;
+    this.mensajeError = null;
+    this.cargandoHorarios = false;
+    this.cdr.detectChanges();
+  }
+
+  cerrarModal(): void {
+    this.modalAbierto = false;
+    this.servicioSeleccionado = null;
+    this.fechaModal = '';
+    this.horariosDisponibles = [];
+    this.horarioSeleccionado = null;
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Cuando el usuario cambia la fecha, consulta los horarios disponibles al backend.
+   */
+  onFechaChange(): void {
+    this.horarioSeleccionado = null;
+    this.horariosDisponibles = [];
+
+    if (!this.fechaModal || !this.servicioSeleccionado) return;
+
+    this.cargandoHorarios = true;
+    this.cdr.detectChanges();
+
+    console.log('[CalendarioTurnos] Consultando disponibilidad para fecha:', this.fechaModal);
+    this.turnoService.getDisponibilidad(
+      this.BARBERO_ID,
+      this.fechaModal,
+      this.servicioSeleccionado.servicio_id
+    ).subscribe({
+      next: (res) => {
+        console.log('[CalendarioTurnos] Disponibilidad recibida:', res);
+        this.horariosDisponibles = res.horariosDisponibles || [];
+        this.cargandoHorarios = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[CalendarioTurnos] Error al consultar disponibilidad:', err);
+        this.cargandoHorarios = false;
+        this.mensajeError = 'No se pudo consultar la disponibilidad para esa fecha.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  seleccionarHorario(horario: { hora_inicio: string; hora_fin: string }): void {
+    this.horarioSeleccionado = horario;
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Confirma y envía el turno al backend.
+   */
+  confirmarReserva(): void {
+    const clienteId = this.authService.getUsuarioId();
+    if (!clienteId) {
+      this.mensajeError = 'No se pudo verificar la sesión. Por favor, reingresa.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    if (!this.servicioSeleccionado || !this.fechaModal || !this.horarioSeleccionado) return;
+
+    this.cargandoReserva = true;
+    this.cdr.detectChanges();
+
+    const turno = {
+      fecha: this.fechaModal,
+      hora_inicio: this.horarioSeleccionado.hora_inicio,
+      clienteId: clienteId,
+      barberoId: this.BARBERO_ID,
+      servicioId: this.servicioSeleccionado.servicio_id,
+      notas: 'Reserva desde la vista cliente'
+    };
+
+    console.log('[CalendarioTurnos] Enviando reserva al backend:', turno);
+    this.turnoService.crearTurno(turno).subscribe({
+      next: () => {
+        this.cargandoReserva = false;
+        this.mensajeExito = `Turno reservado el ${this.fechaModal} a las ${this.horarioSeleccionado!.hora_inicio}.`;
+        this.cerrarModal();
+        
+        // Recargar los turnos para actualizar dinámicamente el calendario
+        this.cargarTurnosDelCalendario();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[CalendarioTurnos] Error al reservar turno:', err);
+        this.cargandoReserva = false;
+        const msg = err.error?.error || 'No se pudo crear el turno.';
+        this.mensajeError = msg;
+        this.cdr.detectChanges();
+      }
+    });
   }
 }

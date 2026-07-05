@@ -12,6 +12,9 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
+  // Si intenta entrar a una ruta de admin sin serlo, lo mandamos al home del cliente
+  if (state.url.includes('/admin') && !authService.isAdmin()) {
+    router.navigate(['/home']);
   // 2. Si la ruta requiere admin, validamos rol
   if (state.url.includes('/admin') && !authService.isAdmin()) {
     router.navigate(['/']); 
