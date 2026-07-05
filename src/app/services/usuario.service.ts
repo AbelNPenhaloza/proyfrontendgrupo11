@@ -63,11 +63,18 @@ export class UsuarioService {
   }
 
   /**
-   * Crea un nuevo usuario mediante la ruta de registro.
+   * Crea un nuevo usuario mediante la ruta de registro (Solo para clientes).
    */
   createUsuario(usuario: any): Observable<any> {
     const url = `${environment.API_BASE_URL}/auth/register`;
     return this.http.post(url, usuario);
+  }
+
+  /**
+   * Crea un usuario con rol específico desde el panel de admin.
+   */
+  createUsuarioAdmin(usuario: any): Observable<any> {
+    return this.http.post(this.apiUrl, usuario);
   }
 
   /**
