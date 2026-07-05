@@ -31,7 +31,7 @@ export class FormularioInscripcion {
           alert('Registro exitoso');
           this.router.navigate(['/login']);
         },
-        error: (err) => console.error('Error al registrar:', err)
+        error: (err:any) => console.error('Error al registrar:', err)
       });
     }
   }

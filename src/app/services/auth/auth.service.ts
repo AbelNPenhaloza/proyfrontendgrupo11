@@ -9,6 +9,10 @@ export class AuthService {
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:3000/api/auth';
 
+  register(userData: RegisterModel): Observable<any> {
+    return this.http.post(`${this.API_URL}/register`, userData);
+  }
+
   login(credentials: LoginModel): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, credentials).pipe(
       tap((response: any) => {
@@ -32,7 +36,6 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    // IMPORTANTE: Aseguramos que lea el valor actual del localStorage
     return localStorage.getItem('role') === 'ADMINISTRADOR';
   }
 

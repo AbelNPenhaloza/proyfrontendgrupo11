@@ -38,7 +38,7 @@ export class Login {
             this.loginForm.reset(); // Limpiamos el formulario
           }
         },
-        error: (err) => {
+        error: (err:any) => {
           console.error('Error al iniciar sesión:', err);
           this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
         }
