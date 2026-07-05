@@ -1,15 +1,15 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
-  selector: 'app-navbar',
+  selector: 'app-navbar-barbero',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
-  templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
+  imports: [RouterLink],
+  templateUrl: './navbar-barbero.html',
+  styleUrl: './navbar-barbero.css'
 })
-export class NavbarComponent {
+export class NavbarBarberoComponent {
   @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
 
   constructor(private authService: AuthService, private router: Router) {}

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { BarberoPerfil } from './components/barbero/barbero-perfil/barbero-perfil';
 import { authGuard } from './guards/auth.guard'; // Importas tu guardia
 
 export const routes: Routes = [
@@ -10,11 +11,6 @@ export const routes: Routes = [
   { 
     path: 'formulario', 
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion) 
-  },
-  // NUEVA RUTA: Captura el callback de Google Login
-  { 
-    path: 'auth/google', 
-    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback) 
   },
   
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
@@ -81,6 +77,30 @@ export const routes: Routes = [
       }
     ]
   },
+  // Rutas del barbero
+  {
+    path: 'barbero',
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./components/barbero/barbero-dashboard/barbero-dashboard').then(m => m.BarberosDashboard)
+      },
+      {
+        path: 'agenda',
+        loadComponent: () => import('./components/barbero/barbero-agenda/barbero-agenda').then(m => m.BarberoAgenda)
+      },
+      {
+        path: 'disponibilidad',
+        loadComponent: () => import('./components/barbero/barbero-disponibilidad/barbero-disponibilidad').then(m => m.BarberoDisponibilidad)
+      },
+      {
+        path: 'perfil',
+        component: BarberoPerfil
+      },
+    ]
+  } ,
   
   // Redirección por defecto
   { path: '', redirectTo: 'login', pathMatch: 'full' },

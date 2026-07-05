@@ -34,7 +34,7 @@ export class GoogleCallback implements OnInit {
         } else {
           // Vista del cliente
           alert('¡Login con Google exitoso! Bienvenido.');
-          this.router.navigate(['/']); 
+          this.router.navigate(['/home']); 
         }
       } else {
         // Si no hay token en la URL, devolvemos al usuario al login
