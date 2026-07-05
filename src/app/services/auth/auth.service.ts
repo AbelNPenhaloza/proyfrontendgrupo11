@@ -51,4 +51,10 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('auth_token');
   }
+  getUsuarioId(): string | null {
+  const token = this.getToken();
+  if (!token) return null;
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  return payload.usuario_id || null;
+  }
 }
