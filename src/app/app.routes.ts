@@ -16,6 +16,11 @@ export const routes: Routes = [
     path: 'auth/google',
     loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
   },
+  {
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/home/home').then(m => m.Home)
+  },
 
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   {
