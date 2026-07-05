@@ -11,6 +11,11 @@ export const routes: Routes = [
     path: 'formulario', 
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion) 
   },
+  // NUEVA RUTA: Captura el callback de Google Login
+  { 
+    path: 'auth/google', 
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback) 
+  },
   
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   { 
