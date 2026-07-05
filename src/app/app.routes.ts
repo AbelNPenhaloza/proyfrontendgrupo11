@@ -11,6 +11,11 @@ export const routes: Routes = [
     path: 'formulario', 
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion) 
   },
+  {
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/home/home').then(m => m.Home)
+  },
   
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   { 

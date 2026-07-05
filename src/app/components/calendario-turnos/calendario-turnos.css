@@ -1,0 +1,217 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-all {
+  transition: all 0.25s ease-in-out;
+}
+
+/* ================= CATALOGO DE SERVICIOS PREMIUM ================= */
+.service-card {
+  border: 1px solid rgba(92, 61, 46, 0.15);
+  background-color: #ffffff;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.service-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 12px 20px -3px rgba(20, 33, 61, 0.12);
+  border-color: #14213D;
+}
+
+.selected-service {
+  border: 2px solid #A8201A !important;
+  background-color: rgba(244, 241, 222, 0.4);
+  box-shadow: 0 6px 15px -3px rgba(168, 32, 26, 0.2);
+}
+
+/* Tipografías y Textos */
+.text-barber-brown {
+  color: #5C3D2E;
+}
+
+/* ================= MODAL CARD DE RESERVA PREMIUM ================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 17, 32, 0.6); /* Overlay más profundo */
+  backdrop-filter: blur(6px); /* Mayor blur para destacar el modal */
+  z-index: 1050;
+  transition: opacity 0.3s ease;
+}
+
+.modal-custom {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 480px;
+  background-color: #ffffff;
+  z-index: 1060;
+  border: 3px solid #5C3D2E; /* Marco Marrón */
+  border-radius: 18px;
+  box-shadow: 0 25px 50px -12px rgba(92, 61, 46, 0.3);
+  display: flex;
+  flex-direction: column;
+  animation: modalFadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -42%) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.modal-header-custom {
+  border-bottom: 3px solid #A8201A;
+}
+
+/* Grid de Horarios Disponibles */
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  gap: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 12px;
+  border: 2px solid #5C3D2E;
+  border-radius: 12px;
+  background-color: #F4F1DE;
+}
+
+.btn-horario {
+  padding: 12px 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #14213D;
+  background-color: #ffffff;
+  border: 1px solid rgba(92, 61, 46, 0.2);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.btn-horario:hover {
+  background-color: #ffffff;
+  border-color: #A8201A;
+  color: #A8201A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(168, 32, 26, 0.1);
+}
+
+.btn-horario-selected {
+  background-color: #A8201A !important;
+  border-color: #A8201A !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(168, 32, 26, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+/* Controles de Input */
+.form-control:focus {
+  border-color: #14213D !important;
+  box-shadow: 0 0 0 3px rgba(20, 33, 61, 0.15) !important;
+}
+
+/* ================= PERSONALIZACIÓN PREMIUM DE FULLCALENDAR ================= */
+.calendar-wrapper {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+::ng-deep .fc {
+  font-family: var(--font-body);
+}
+
+::ng-deep .fc .fc-toolbar-title {
+  color: #14213D !important;
+  font-family: var(--font-title);
+  font-size: 1.3rem !important;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+::ng-deep .fc .fc-button-primary {
+  background-color: #14213D !important;
+  border-color: #14213D !important;
+  font-weight: 700;
+  text-transform: capitalize;
+  border-radius: 30px !important;
+  padding: 6px 16px !important;
+  transition: all 0.25s ease;
+}
+
+::ng-deep .fc .fc-button-primary:hover {
+  background-color: #A8201A !important;
+  border-color: #A8201A !important;
+}
+
+::ng-deep .fc .fc-button-primary:disabled {
+  background-color: #cccccc !important;
+  border-color: #cccccc !important;
+}
+
+::ng-deep .fc .fc-daygrid-day-number {
+  color: #14213D;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 6px !important;
+}
+
+::ng-deep .fc .fc-col-header-cell-cushion {
+  color: #5C3D2E !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+::ng-deep .fc .fc-daygrid-day:hover {
+  background-color: rgba(244, 241, 222, 0.5) !important;
+  cursor: pointer;
+}
+
+::ng-deep .fc .fc-day-today {
+  background-color: rgba(20, 33, 61, 0.03) !important;
+}
+
+::ng-deep .fc .fc-day-today .fc-daygrid-day-number {
+  background-color: #A8201A;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+}
+
+/* Eventos del calendario */
+::ng-deep .fc-event {
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-weight: 600;
+  font-size: 0.75rem !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+::ng-deep .fc-event-title {
+  font-weight: 700;
+}

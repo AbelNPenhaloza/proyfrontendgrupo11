@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Turno } from '../models/turno.model';
+import { Servicio } from '../models/servicio.model';
 import { environment } from '../../environments/environment';
 
 /**
@@ -12,6 +13,26 @@ import { environment } from '../../environments/environment';
 export class TurnoService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.API_BASE_URL}/turnos`;
+
+  /**
+   * Obtiene todos los servicios disponibles para el catálogo.
+   */
+  getServicios(): Observable<Servicio[]> {
+    const serviciosUrl = `${environment.API_BASE_URL}/servicios`;
+    return this.http.get<any>(serviciosUrl).pipe(
+      map(res => {
+        const serviciosArray = Array.isArray(res) ? res : (res.servicios || res.data || []);
+        return serviciosArray.map((s: any) => ({
+          servicio_id: s.servicio_id,
+          nombre: s.nombre,
+          descripcion: s.descripcion,
+          duracion_minutos: s.duracion_minutos,
+          precio: Number(s.precio),
+          activo: s.activo
+        }));
+      })
+    );
+  }
 
   /**
    * Obtiene todos los turnos registrados desde el backend y mapea las asociaciones.
@@ -97,6 +118,14 @@ export class TurnoService {
    */
   createTurno(turno: any): Observable<any> {
     return this.http.post(this.apiUrl, turno);
+  }
+
+  /**
+   * Crea un nuevo turno (alias solicitado).
+   * @param turno - Datos del turno
+   */
+  crearTurno(turno: any): Observable<any> {
+    return this.createTurno(turno);
   }
 
   /**
