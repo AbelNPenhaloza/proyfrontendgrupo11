@@ -9,7 +9,7 @@
       <label class="fw-semibold mb-0">Seleccionar fecha:</label>
       <input type="date" class="form-control w-auto" 
              [(ngModel)]="fechaSeleccionada" 
-             (change)="cargarTurnos()">
+             (change)="cargarAgenda()">
     </div>
   </div>
 
@@ -58,6 +58,11 @@
                         <i class="bi bi-check-circle me-1"></i>Atendido
                       </button>
                     }
+                    @if (turno.estado === 'ATENDIDO') {
+                      <button class="btn btn-sm btn-warning" (click)="cobrar(turno)">
+                        <i class="bi bi-cash me-1"></i>Cobrar
+                      </button>
+                    }
                   </td>
                 </tr>
               }
@@ -68,3 +73,25 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de error: fecha no alcanzada -->
+@if (mostrarModalError) {
+  <div class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Fecha no alcanzada
+          </h5>
+          <button type="button" class="btn-close" (click)="cerrarModalError()"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-0">{{ mensajeModalError }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarModalError()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
