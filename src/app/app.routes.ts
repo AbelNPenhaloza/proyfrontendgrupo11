@@ -78,7 +78,12 @@ export const routes: Routes = [
       { 
         path: 'servicios/editar/:id', 
         loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm) 
-      }
+      },
+      { 
+    path: 'perfil', 
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil) 
+  },
     ]
   },
   

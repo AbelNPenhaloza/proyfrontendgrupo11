@@ -83,4 +83,17 @@ export class UsuarioService {
   getUsuarioById(id: string): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`);
   }
+  /**
+   * Obtiene los datos del perfil propio del usuario autenticado.
+   */
+  getPerfil(): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.apiUrl}/perfil`);
+  }
+
+  /**
+   * Actualiza los datos del perfil propio.
+   */
+  actualizarPerfil(data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/perfil`, data);
+  }
 }
