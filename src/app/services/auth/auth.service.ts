@@ -14,17 +14,12 @@ export class AuthService {
       tap((response: any) => {
         if (response.token) {
           localStorage.setItem('auth_token', response.token);
-          // Guardamos el rol si viene en la respuesta del backend
           if (response.usuario?.rol) {
             localStorage.setItem('role', response.usuario.rol);
           }
         }
       })
     );
-  }
-
-  register(userData: RegisterModel): Observable<any> {
-    return this.http.post(`${this.API_URL}/register`, userData);
   }
 
   logout(): void {
@@ -37,6 +32,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
+    // IMPORTANTE: Aseguramos que lea el valor actual del localStorage
     return localStorage.getItem('role') === 'ADMINISTRADOR';
   }
 
