@@ -35,7 +35,7 @@ export class Login {
             this.router.navigate(['/home']);
           }
         },
-        error: (err) => {
+        error: (err:any) => {
           console.error('Error al iniciar sesión:', err);
           this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
         }

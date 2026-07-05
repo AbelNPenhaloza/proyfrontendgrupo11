@@ -16,6 +16,9 @@ export class AuthService {
   // Computed signals derivados del estado de autenticación
   readonly isAuthenticated = computed(() => !!this._token());
   readonly isAdmin = computed(() => this._role() === 'ADMINISTRADOR');
+  register(userData: RegisterModel): Observable<any> {
+    return this.http.post(`${this.API_URL}/register`, userData);
+  }
 
   login(credentials: LoginModel): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, credentials).pipe(
@@ -30,10 +33,6 @@ export class AuthService {
         }
       })
     );
-  }
-
-  register(userData: RegisterModel): Observable<any> {
-    return this.http.post(`${this.API_URL}/register`, userData);
   }
 
   logout(): void {
