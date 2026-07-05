@@ -6,19 +6,20 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // 1. Verificar si está autenticado
+  // Verificar si está autenticado
   if (!authService.isAuthenticated()) {
     router.navigate(['/login']);
     return false;
   }
 
-  // Si intenta entrar a una ruta de admin sin serlo, lo mandamos al home del cliente
+  // Verificar si la ruta es de admin y el usuario no tiene permisos
   if (state.url.includes('/admin') && !authService.isAdmin()) {
-    router.navigate(['/home']);
+    router.navigate(['/']); // Redirigir al inicio o dashboard cliente
     return false;
   }
-
-  // Si llega aquí, es porque está logueado. 
-  // Si la ruta es '/perfil', el guardia lo permite porque pasó el primer IF.
+  if (state.url.includes('/barbero') && !authService.isBarbero()) {
+    router.navigate(['/login']);
+    return false;
+  }
   return true;
 };

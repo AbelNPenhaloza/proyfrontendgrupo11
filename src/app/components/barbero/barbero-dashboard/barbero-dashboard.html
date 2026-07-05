@@ -1,0 +1,73 @@
+<div class="container-fluid p-4">
+  <div class="mb-4">
+    <h2 class="fw-bold"><i class="bi bi-person-badge me-2"></i>Panel del Barbero</h2>
+    <p class="text-muted">Agenda del día: {{ fechaHoy }}</p>
+  </div>
+
+  <!-- Accesos rápidos -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-4">
+      <a routerLink="/barbero/agenda" class="card text-center p-3 text-decoration-none h-100">
+        <i class="bi bi-calendar-check fs-2 text-primary"></i>
+        <p class="mt-2 mb-0 fw-semibold">Mi Agenda</p>
+      </a>
+    </div>
+    <div class="col-6 col-md-4">
+      <a routerLink="/barbero/disponibilidad" class="card text-center p-3 text-decoration-none h-100">
+        <i class="bi bi-clock fs-2 text-success"></i>
+        <p class="mt-2 mb-0 fw-semibold">Mi Disponibilidad</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Turnos de hoy -->
+  <div class="card">
+    <div class="card-header bg-white">
+      <h6 class="mb-0 fw-semibold"><i class="bi bi-list-check me-2"></i>Turnos de Hoy</h6>
+    </div>
+    <div class="card-body">
+      @if (cargando) {
+        <p class="text-muted text-center">Cargando...</p>
+      } @else if (turnosHoy.length === 0) {
+        <p class="text-muted text-center">No hay turnos para hoy.</p>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Hora</th>
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (turno of turnosHoy; track turno.turno_id) {
+                <tr>
+                  <td>{{ turno.hora_inicio }}</td>
+                  <td>{{ turno.Cliente?.nombre }} {{ turno.Cliente?.apellido }}</td>
+                  <td>{{ turno.Servicio?.nombre }}</td>
+                  <td>
+                    <span class="badge" [class]="turno.estado === 'ATENDIDO' ? 'bg-success' : 
+                                                  turno.estado === 'CONFIRMADO' ? 'bg-primary' : 
+                                                  turno.estado === 'CANCELADO' ? 'bg-danger' : 'bg-warning'">
+                      {{ turno.estado }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (turno.estado !== 'ATENDIDO' && turno.estado !== 'CANCELADO') {
+                      <button class="btn btn-sm btn-success" (click)="marcarAtendido(turno.turno_id)">
+                        <i class="bi bi-check-circle me-1"></i>Atendido
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</div>

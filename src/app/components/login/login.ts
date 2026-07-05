@@ -28,14 +28,16 @@ export class Login {
       
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          // Redirigimos inteligentemente según el rol guardado
           if (this.authService.isAdmin()) {
             this.router.navigate(['/admin']);
+          } else if (this.authService.isBarbero()) {
+            this.router.navigate(['/barbero/dashboard']);
           } else {
-            this.router.navigate(['/home']);
+            alert('¡Login exitoso! Bienvenido (La vista del cliente está en construcción)');
+            this.loginForm.reset();
           }
         },
-        error: (err:any) => {
+        error: (err) => {
           console.error('Error al iniciar sesión:', err);
           this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
         }

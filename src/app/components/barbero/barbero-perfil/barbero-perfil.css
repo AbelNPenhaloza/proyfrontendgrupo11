@@ -1,0 +1,83 @@
+:host {
+  display: block;
+  background-color: #F4F1DE;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+h2 {
+  color: #14213D;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.card-header {
+  background-color: #14213D !important;
+  color: #F4F1DE;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+label {
+  color: #5C3D2E;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-control-plaintext {
+  color: #14213D;
+  font-size: 1rem;
+  padding: 0;
+  border-bottom: 1px solid #e0ddd0;
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  background-color: #A8201A !important;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.btn-outline-dark {
+  color: #14213D;
+  border-color: #14213D;
+  border-radius: 8px;
+}
+
+.btn-outline-dark:hover {
+  background-color: #14213D;
+  color: #F4F1DE;
+}
+
+.btn-primary {
+  background-color: #A8201A;
+  border-color: #A8201A;
+  border-radius: 8px;
+}
+
+.btn-primary:hover {
+  background-color: #8a1a15;
+  border-color: #8a1a15;
+}
+
+.btn-secondary {
+  border-radius: 8px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+  border-radius: 8px;
+}
