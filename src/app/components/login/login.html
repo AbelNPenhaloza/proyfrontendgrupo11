@@ -48,10 +48,18 @@
               }
             </div>
 
-            <!-- Botón de Envío -->
-            <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary w-100 mb-3">
+            <!-- Botón de Envío Clásico -->
+            <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary w-100 mb-2">
               Entrar
             </button>
+
+            <!-- Separador y Botón de Google (NUEVO) -->
+            <div class="text-center mb-2">
+              <span class="text-muted small">o ingresa con</span>
+            </div>
+            <a href="http://localhost:3000/api/auth/google" class="btn btn-outline-danger w-100 mb-3">
+              <i class="bi bi-google me-2"></i> Iniciar sesión con Google
+            </a>
             
             <!-- Enlace al Registro -->
             <div class="text-center mt-2">
