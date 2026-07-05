@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth/auth.service';
@@ -15,6 +15,7 @@ import { environment } from '../../../../environments/environment';
 export class BarberoPerfil implements OnInit {
   private authService = inject(AuthService);
   private http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
 
   perfil: any = {};
   editando = false;
@@ -23,29 +24,41 @@ export class BarberoPerfil implements OnInit {
 
   ngOnInit(): void {
     const token = this.authService.getToken();
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = { 
+      Authorization: `Bearer ${token}`,
+      'Cache-Control': 'no-cache'
+    };
     
     this.http.get(`${environment.API_BASE_URL}/usuarios/perfil`, { headers }).subscribe({
       next: (data) => {
         this.perfil = data;
         this.cargando = false;
+        this.cdr.detectChanges();
       },
-      error: () => this.cargando = false
+      error: (err) => {
+        console.log('Error:', err);
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
   guardar(): void {
+    const token = this.authService.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
     this.http.put(`${environment.API_BASE_URL}/usuarios/perfil`, {
       nombre: this.perfil.nombre,
       apellido: this.perfil.apellido,
       celular: this.perfil.celular
-    }).subscribe({
+    }, { headers }).subscribe({
       next: () => {
         this.mensaje = 'Perfil actualizado correctamente.';
         this.editando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensaje = 'Error al actualizar perfil.';
+        this.cdr.detectChanges();
       }
     });
   }
