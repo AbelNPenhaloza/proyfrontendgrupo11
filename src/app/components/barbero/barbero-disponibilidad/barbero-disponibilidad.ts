@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BarberoPanelService } from '../../../services/barbero/barbero-panel.service';
@@ -14,6 +14,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class BarberoDisponibilidad implements OnInit {
   private barberoPanelService = inject(BarberoPanelService);
   private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef);
 
   disponibilidad: any[] = [];
   barberoId: string = '';
@@ -34,19 +35,24 @@ export class BarberoDisponibilidad implements OnInit {
     const token = this.authService.getToken();
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      this.barberoId = payload.usuario_id;
+      this.barberoId = payload.barbero_id;
     }
-    this.cargarDisponibilidad();
+    this.cargarDisponibilidad(); // o cargarTurnos() o cargarDisponibilidad()
   }
 
   cargarDisponibilidad(): void {
     this.cargando = true;
     this.barberoPanelService.getDisponibilidad(this.barberoId).subscribe({
       next: (data) => {
-        this.disponibilidad = data;
+        this.disponibilidad = Array.isArray(data) ? data : data.disponibilidad || [];
         this.cargando = false;
+        this.cdr.detectChanges();
       },
-      error: () => this.cargando = false
+      error: () => {
+        this.disponibilidad = [];
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -60,10 +66,12 @@ export class BarberoDisponibilidad implements OnInit {
       next: () => {
         this.mensaje = 'Disponibilidad actualizada correctamente.';
         this.guardando = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensaje = 'Error al actualizar disponibilidad.';
         this.guardando = false;
+        this.cdr.detectChanges();
       }
     });
   }
