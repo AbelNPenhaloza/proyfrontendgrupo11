@@ -1,0 +1,23 @@
+@if (authService.isAuthenticated() && authService.isAdmin()) {
+  <app-navbar></app-navbar>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+} @else if (authService.isAuthenticated() && authService.isBarbero()) {
+  <app-navbar-barbero></app-navbar-barbero>
+  <main class="main-content">
+    <router-outlet />
+  </main>
+} @else {
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+    <div class="container">
+      <a class="navbar-brand" href="#">Barbería 11</a>
+      <div class="navbar-nav">
+        <a class="nav-link" routerLink="/login">Login</a>
+        <a class="nav-link" routerLink="/formulario">Registro</a>
+      </div>
+    </div>
+  </nav>
+  
+  <router-outlet />
+}

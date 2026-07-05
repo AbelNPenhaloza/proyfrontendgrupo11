@@ -1,0 +1,94 @@
+<div class="container py-4">
+  <div class="d-flex align-items-center mb-4">
+    <button class="btn btn-outline-secondary me-3" routerLink="/admin/turnos">
+      <i class="bi bi-arrow-left"></i> Volver
+    </button>
+    <h3 class="mb-0">{{ esEdicion ? 'Editar' : 'Crear' }} Turno</h3>
+  </div>
+
+  <div class="card shadow-sm col-md-8 col-lg-6">
+    <div class="card-body p-4">
+      @if (guardado) {
+        <div class="text-center py-5">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+          <h2 class="mt-4 text-dark fw-bold">¡Turno Creado Exitosamente!</h2>
+          <p class="text-muted fs-5">Redirigiendo a la lista de turnos...</p>
+        </div>
+      } @else {
+      <form (ngSubmit)="guardar()" #turnoForm="ngForm">
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Cliente</label>
+          <select class="form-select" name="clienteId" [(ngModel)]="turno.clienteId" required>
+            <option value="" disabled>-- Seleccionar cliente --</option>
+            @for (cliente of clientes; track cliente.usuario_id) {
+              <option [value]="cliente.usuario_id">{{ cliente.nombre }} {{ cliente.apellido }} ({{ cliente.email }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Barbero</label>
+          <select class="form-select" name="barberoId" [(ngModel)]="turno.barberoId" (change)="cargarHorariosDisponibles()" required>
+            <option value="" disabled>-- Seleccionar barbero --</option>
+            @for (barbero of barberos; track barbero.barbero_id) {
+              <option [value]="barbero.barbero_id">{{ barbero.nombre_completo }} ({{ barbero.especialidad }})</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Servicio</label>
+          <select class="form-select" name="servicioId" [(ngModel)]="turno.servicioId" (change)="cargarHorariosDisponibles()" required>
+            <option value="" disabled>-- Seleccionar servicio --</option>
+            @for (servicio of servicios; track servicio.servicio_id) {
+              <option [value]="servicio.servicio_id">{{ servicio.nombre }} - ${{ servicio.precio }} ({{ servicio.duracion_minutos }} min)</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Fecha</label>
+          <input type="date" class="form-control" name="fecha" [(ngModel)]="turno.fecha" (change)="cargarHorariosDisponibles()" required>
+        </div>
+
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label class="form-label fw-bold">Hora Inicio</label>
+            <select class="form-select" name="hora_inicio" [(ngModel)]="turno.hora_inicio" required [disabled]="horariosDisponibles.length === 0 || cargandoHorarios">
+              <option value="" disabled>-- Seleccionar horario disponible --</option>
+              @for (horario of horariosDisponibles; track horario.hora_inicio) {
+                <option [value]="horario.hora_inicio.substring(0,5)">{{ horario.hora_inicio.substring(0,5) }} a {{ horario.hora_fin.substring(0,5) }}</option>
+              }
+            </select>
+            @if (cargandoHorarios) {
+              <small class="text-primary"><i class="bi bi-arrow-repeat spin"></i> Buscando horarios...</small>
+            } @else if (horariosDisponibles.length === 0 && turno.fecha && turno.barberoId && turno.servicioId) {
+              <small class="text-danger">No hay horarios disponibles para esa fecha.</small>
+            } @else if (horariosDisponibles.length === 0) {
+              <small class="text-muted">Seleccioná fecha, barbero y servicio para ver los horarios libres.</small>
+            } @else {
+              <small class="text-success">Horarios cargados correctamente.</small>
+            }
+          </div>
+        </div>
+
+
+
+        <div class="mb-4">
+          <label class="form-label fw-bold">Notas</label>
+          <textarea class="form-control" name="notas" [(ngModel)]="turno.notas" rows="2" placeholder="Notas opcionales..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 fs-5 shadow-sm" [disabled]="!turnoForm.form.valid || cargando">
+          @if (cargando) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>Guardando...
+          } @else {
+            <i class="bi bi-save me-2"></i>Guardar Turno
+          }
+        </button>
+      </form>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="container-fluid p-4">
+  <div class="mb-4">
+    <h2 class="fw-bold"><i class="bi bi-calendar-check me-2"></i>Mi Agenda</h2>
+  </div>
+
+  <!-- Selector de fecha -->
+  <div class="card mb-4">
+    <div class="card-body d-flex align-items-center gap-3">
+      <label class="fw-semibold mb-0">Seleccionar fecha:</label>
+      <input type="date" class="form-control w-auto" 
+             [(ngModel)]="fechaSeleccionada" 
+             (change)="cargarTurnos()">
+    </div>
+  </div>
+
+  <!-- Tabla de turnos -->
+  <div class="card">
+    <div class="card-header bg-white">
+      <h6 class="mb-0 fw-semibold"><i class="bi bi-list-check me-2"></i>Turnos del día</h6>
+    </div>
+    <div class="card-body">
+      @if (cargando) {
+        <p class="text-muted text-center">Cargando...</p>
+      } @else if (turnos.length === 0) {
+        <p class="text-muted text-center">No hay turnos para esta fecha.</p>
+      } @else {
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Hora inicio</th>
+                <th>Hora fin</th>
+                <th>Cliente</th>
+                <th>Servicio</th>
+                <th>Notas</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (turno of turnos; track turno.turno_id) {
+                <tr>
+                  <td>{{ turno.hora_inicio }}</td>
+                  <td>{{ turno.hora_fin }}</td>
+                  <td>{{ turno.Cliente?.nombre }} {{ turno.Cliente?.apellido }}</td>
+                  <td>{{ turno.Servicio?.nombre }}</td>
+                  <td>{{ turno.notas || '-' }}</td>
+                  <td>
+                    <span class="badge" [class]="turno.estado === 'ATENDIDO' ? 'bg-success' : 
+                                                  turno.estado === 'CONFIRMADO' ? 'bg-primary' : 
+                                                  turno.estado === 'CANCELADO' ? 'bg-danger' : 'bg-warning'">
+                      {{ turno.estado }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (turno.estado !== 'ATENDIDO' && turno.estado !== 'CANCELADO') {
+                      <button class="btn btn-sm btn-success" (click)="marcarAtendido(turno.turno_id)">
+                        <i class="bi bi-check-circle me-1"></i>Atendido
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  </div>
+</div>

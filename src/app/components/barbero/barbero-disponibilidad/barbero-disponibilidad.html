@@ -1,0 +1,54 @@
+<div class="container-fluid p-4">
+  <div class="mb-4">
+    <h2 class="fw-bold"><i class="bi bi-clock me-2"></i>Mi Disponibilidad</h2>
+    <p class="text-muted">Configurá tus horarios de trabajo</p>
+  </div>
+
+  @if (cargando) {
+    <p class="text-muted text-center">Cargando...</p>
+  } @else {
+    <div class="card">
+      <div class="card-body">
+        @if (mensaje) {
+          <div class="alert alert-success">{{ mensaje }}</div>
+        }
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Día</th>
+                <th>Hora inicio</th>
+                <th>Hora fin</th>
+                <th>Activo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (disp of disponibilidad; track disp.disponibilidad_id) {
+                <tr>
+                  <td>{{ getNombreDia(disp.dia_semana) }}</td>
+                  <td>
+                    <input type="time" class="form-control form-control-sm w-auto" 
+                           [(ngModel)]="disp.hora_inicio">
+                  </td>
+                  <td>
+                    <input type="time" class="form-control form-control-sm w-auto" 
+                           [(ngModel)]="disp.hora_fin">
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" 
+                             [(ngModel)]="disp.activo">
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-primary" (click)="guardar()" [disabled]="guardando">
+          <i class="bi bi-save me-1"></i>{{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

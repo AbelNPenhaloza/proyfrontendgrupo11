@@ -1,0 +1,22 @@
+:root {
+  --primary-color: #A8201A;    /* Rojo Tradición */
+  --secondary-color: #14213D;  /* Azul Moderno */
+  --light-bg: #F4F1DE;         /* Crema Suave */
+  --accent-brown: #5C3D2E;     /* Marrón Barbería */
+  --font-main: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: var(--light-bg);
+  color: var(--secondary-color);
+  font-family: var(--font-main);
+}
+
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.navbar {
+  background-color: var(--secondary-color) !important;
+}
