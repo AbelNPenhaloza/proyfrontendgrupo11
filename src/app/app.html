@@ -1,18 +1,7 @@
 @if (authService.isAuthenticated() && authService.isAdmin()) {
   <app-navbar></app-navbar>
-  <main class="main-content">
-    <div><router-outlet /></div>
-  </main>
 } @else if (authService.isAuthenticated() && authService.isBarbero()) {
   <app-navbar-barbero></app-navbar-barbero>
-  <main class="main-content">
-    <div><router-outlet /></div>
-  </main>
-} @else if (authService.isAuthenticated()) {
-  <app-navbar-cliente></app-navbar-cliente>
-  <main class="main-content">
-    <div><router-outlet /></div>
-  </main>
 } @else if (authService.isAuthenticated()) {
   <!-- NAVBAR PARA CLIENTES LOGUEADOS -->
   <nav class="navbar navbar-expand-lg" style="background-color: #14213D; border-bottom: 3px solid #A8201A;">
@@ -29,9 +18,6 @@
       </div>
     </div>
   </nav>
-  <main class="main-content">
-    <router-outlet />
-  </main>
 } @else {
   <!-- VISITANTES NO LOGUEADOS -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
@@ -43,7 +29,4 @@
       </div>
     </div>
   </nav>
-  <main class="main-content">
-    <div><router-outlet /></div>
-  </main>
 }

@@ -40,7 +40,7 @@ export class CalendarioTurnos implements OnInit {
   readonly fechaMinima = new Date().toISOString().split('T')[0];
 
   // Barbero asignado por defecto para las reservas del cliente (Corregido con ID real)
-  private readonly BARBERO_ID = '31c08935-25d7-4e3d-847c-1a17daf0ff3e';
+  private readonly BARBERO_ID = '28858df8-cf45-4361-bd29-1682fe19b6b7';
 
   // Opciones de configuración de FullCalendar
   calendarOptions: CalendarOptions = {
@@ -95,9 +95,12 @@ export class CalendarioTurnos implements OnInit {
       next: (turnosRegistrados) => {
         this.turnos = turnosRegistrados;
         
-        // Mapear los turnos al formato que FullCalendar requiere para sus eventos
+        const miUsuarioId = this.authService.getUsuarioId();
+
+        // Mapear los turnos al formato que FullCalendar requiere, 
+        // filtrando SOLO los turnos del cliente logueado (privacidad)
         const eventosMapeados = this.turnos
-          .filter(t => t.estado !== 'CANCELADO')
+          .filter(t => t.estado !== 'CANCELADO' && t.cliente_id === miUsuarioId)
           .map(t => ({
             title: t.nombreServicio || 'Turno Reservado',
             start: `${t.fecha}T${t.hora_inicio}`,
