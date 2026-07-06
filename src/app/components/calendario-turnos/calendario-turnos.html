@@ -214,3 +214,66 @@
     </div>
   </div>
 }
+
+<!-- Modal Detalle de Turno (Se abre al hacer clic en un turno del calendario) -->
+@if (modalDetalleAbierto && turnoDetalle) {
+<div class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
+      <!-- Header -->
+      <div class="modal-header text-white" style="background: linear-gradient(135deg, #14213D, #0A1120); border-bottom: 3px solid #A8201A;">
+        <h5 class="modal-title fw-bold text-uppercase" style="letter-spacing: 1px;"><i class="bi bi-ticket-detailed me-2"></i>Detalle del Turno</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cerrarModalDetalle()"></button>
+      </div>
+      <!-- Body -->
+      <div class="modal-body p-4" style="background-color: #F4F1DE; color: #14213D;">
+        
+        <div class="d-flex align-items-center mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+          <div class="bg-white p-3 rounded-circle shadow-sm me-3 border border-secondary border-opacity-10">
+            <i class="bi bi-scissors fs-3" style="color: #A8201A;"></i>
+          </div>
+          <div>
+            <h4 class="mb-0 fw-bold">{{ turnoDetalle.servicio }}</h4>
+            <p class="mb-0 text-muted small"><i class="bi bi-person-badge me-1"></i>Con: {{ turnoDetalle.barbero }}</p>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <div class="p-3 bg-white rounded shadow-sm border border-secondary border-opacity-10 text-center h-100">
+              <i class="bi bi-calendar-event d-block fs-4 mb-1" style="color: #14213D;"></i>
+              <strong class="d-block small text-uppercase text-muted">Fecha</strong>
+              <span class="fw-bold">{{ turnoDetalle.fecha | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-white rounded shadow-sm border border-secondary border-opacity-10 text-center h-100">
+              <i class="bi bi-clock d-block fs-4 mb-1" style="color: #14213D;"></i>
+              <strong class="d-block small text-uppercase text-muted">Horario</strong>
+              <span class="fw-bold">{{ turnoDetalle.horaInicio }} - {{ turnoDetalle.horaFin }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-3 bg-white rounded shadow-sm border border-secondary border-opacity-10">
+          <div>
+            <strong class="d-block small text-uppercase text-muted mb-1">Precio a pagar</strong>
+            <span class="fs-4 fw-bold text-success">${{ turnoDetalle.precio }}</span>
+          </div>
+          <div class="text-end">
+            <strong class="d-block small text-uppercase text-muted mb-1">Estado</strong>
+            <span class="badge" [ngClass]="{'bg-success': turnoDetalle.estado === 'CONFIRMADO' || turnoDetalle.estado === 'PAGADO', 'bg-warning text-dark': turnoDetalle.estado === 'PENDIENTE'}">
+              {{ turnoDetalle.estado }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer" style="background-color: #F4F1DE; border-top: 1px solid rgba(20, 33, 61, 0.1);">
+        <button type="button" class="btn btn-secondary rounded-pill px-4" (click)="cerrarModalDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+}

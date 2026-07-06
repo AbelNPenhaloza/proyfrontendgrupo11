@@ -36,6 +36,10 @@ export class CalendarioTurnos implements OnInit {
   cargandoHorarios = false;
   cargandoReserva = false;
 
+  // Estado del modal de detalle de turno
+  modalDetalleAbierto = false;
+  turnoDetalle: any = null;
+
   // Fecha minima: no se puede reservar en el pasado
   readonly fechaMinima = new Date().toISOString().split('T')[0];
 
@@ -54,6 +58,7 @@ export class CalendarioTurnos implements OnInit {
       right: ''
     },
     selectable: false,
+    eventClick: this.handleEventClick.bind(this),
     events: [] // Se poblará dinámicamente con los turnos cargados
   };
 
@@ -107,7 +112,15 @@ export class CalendarioTurnos implements OnInit {
             end: `${t.fecha}T${t.hora_fin}`,
             color: '#14213D', // Azul marino oficial
             textColor: '#F4F1DE', // Arena/Crema oficial para legibilidad
-            borderColor: '#5C3D2E' // Marrón oficial para el borde del evento
+            borderColor: '#5C3D2E', // Marrón oficial para el borde del evento
+            extendedProps: {
+              barbero: t.nombreBarbero,
+              precio: t.precioServicio,
+              estado: t.estado,
+              horaInicio: t.hora_inicio,
+              horaFin: t.hora_fin,
+              fechaFormateada: t.fecha
+            }
           }));
 
         // Actualizar las opciones del calendario con los nuevos eventos
@@ -148,6 +161,30 @@ export class CalendarioTurnos implements OnInit {
     this.fechaModal = '';
     this.horariosDisponibles = [];
     this.horarioSeleccionado = null;
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Maneja el click sobre un turno en el calendario visual.
+   */
+  handleEventClick(info: any): void {
+    const props = info.event.extendedProps;
+    this.turnoDetalle = {
+      servicio: info.event.title,
+      fecha: props.fechaFormateada,
+      horaInicio: props.horaInicio,
+      horaFin: props.horaFin,
+      barbero: props.barbero,
+      precio: props.precio,
+      estado: props.estado
+    };
+    this.modalDetalleAbierto = true;
+    this.cdr.detectChanges();
+  }
+
+  cerrarModalDetalle(): void {
+    this.modalDetalleAbierto = false;
+    this.turnoDetalle = null;
     this.cdr.detectChanges();
   }
 
