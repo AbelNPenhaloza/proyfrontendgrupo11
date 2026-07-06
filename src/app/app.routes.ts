@@ -12,6 +12,9 @@ export const routes: Routes = [
     path: 'auth/google',
     loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
   },
+  { path: 'pago/exitoso', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  { path: 'pago/fallido', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  { path: 'pago/pendiente', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
   {
     path: 'formulario',
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion)
