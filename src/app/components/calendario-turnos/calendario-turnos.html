@@ -128,9 +128,25 @@
     <!-- Cuerpo -->
     <div class="p-4" style="background-color: #ffffff;">
 
-      <!-- Elegir fecha -->
+      <!-- Elegir Barbero -->
       <div class="mb-4">
-        <label class="form-label fw-bold text-uppercase tracking-wider small" style="color: #14213D;">1. Selecciona el Día</label>
+        <label class="form-label fw-bold text-uppercase tracking-wider small" style="color: #14213D;">1. Selecciona el Profesional</label>
+        <select
+          class="form-select form-select-lg border-2"
+          [(ngModel)]="barberoSeleccionadoId"
+          (change)="onBarberoChange()"
+          style="border-color: #5C3D2E; border-radius: 10px; font-family: var(--font-body); font-weight: 500; cursor: pointer;"
+        >
+          <option value="" disabled selected>-- Elige un Barbero --</option>
+          @for (barbero of barberosActivos; track barbero.barbero_id) {
+            <option [value]="barbero.barbero_id">{{ barbero.nombre_completo }} ({{ barbero.especialidad }})</option>
+          }
+        </select>
+      </div>
+
+      <!-- Elegir fecha -->
+      <div class="mb-4" [class.opacity-50]="!barberoSeleccionadoId" [style.pointer-events]="!barberoSeleccionadoId ? 'none' : 'auto'">
+        <label class="form-label fw-bold text-uppercase tracking-wider small" style="color: #14213D;">2. Selecciona el Día</label>
         <div class="input-group">
           <input
             type="date"
@@ -138,6 +154,7 @@
             [(ngModel)]="fechaModal"
             [min]="fechaMinima"
             (change)="onFechaChange()"
+            [disabled]="!barberoSeleccionadoId"
             style="border-color: #5C3D2E; border-radius: 10px; font-family: var(--font-body); font-weight: 500;"
           />
         </div>
@@ -146,7 +163,7 @@
       <!-- Horarios disponibles -->
       <div class="mb-4">
         <label class="form-label fw-bold text-uppercase tracking-wider small d-block mb-2" style="color: #14213D;">
-          2. Elige un Horario Laboral
+          3. Elige un Horario Laboral
         </label>
         <span class="text-muted d-block small mb-3" style="margin-top: -5px; font-size: 0.8rem;">
           * Jornada laboral de 8 horas (Turnos disponibles entre 08:00 y 20:00)
