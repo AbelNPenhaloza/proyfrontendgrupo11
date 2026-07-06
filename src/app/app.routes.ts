@@ -17,24 +17,24 @@ export const routes: Routes = [
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion)
   },
   {
-  path: 'auth/google',
-  loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
+    path: 'auth/google',
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
   },
   {
-        path: 'home',
-        canActivate: [authGuard],
-        loadComponent: () => import('./components/home/home').then(m => m.Home)
-      },
-      {
-        path: 'perfil',
-        canActivate: [authGuard],
-        loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil)
-      },
-      {
-        path: 'cliente/turnos',
-        canActivate: [authGuard],
-        loadComponent: () => import('./components/calendario-turnos/calendario-turnos').then(m => m.CalendarioTurnos)
-      },
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/home/home').then(m => m.Home)
+  },
+  {
+    path: 'perfil',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil)
+  },
+  {
+    path: 'cliente/turnos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/calendario-turnos/calendario-turnos').then(m => m.CalendarioTurnos)
+  },
 
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   {
@@ -97,7 +97,11 @@ export const routes: Routes = [
       {
         path: 'servicios/editar/:id',
         loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm)
-      }
+      },
+      {
+        path: 'auditoria',
+        loadComponent: () => import('./components/admin/auditoria-table/auditoria-table').then(m => m.AuditoriaTable)
+      },
     ]
   },
   // Rutas del barbero
