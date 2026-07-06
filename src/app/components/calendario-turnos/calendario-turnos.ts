@@ -6,8 +6,10 @@ import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { TurnoService } from '../../services/turno.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { BarberoService } from '../../services/barbero.service';
 import { Servicio } from '../../models/servicio.model';
 import { Turno } from '../../models/turno.model';
+import { Barbero } from '../../models/barbero.model';
 
 @Component({
   selector: 'app-calendario-turnos',
@@ -19,6 +21,7 @@ import { Turno } from '../../models/turno.model';
 export class CalendarioTurnos implements OnInit {
   private turnoService = inject(TurnoService);
   private authService = inject(AuthService);
+  private barberoService = inject(BarberoService);
   private cdr = inject(ChangeDetectorRef);
 
   // Listado de servicios y turnos cargados
@@ -43,8 +46,9 @@ export class CalendarioTurnos implements OnInit {
   // Fecha minima: no se puede reservar en el pasado
   readonly fechaMinima = new Date().toISOString().split('T')[0];
 
-  // Barbero asignado por defecto para las reservas del cliente (Corregido con ID real)
-  private readonly BARBERO_ID = '31c08935-25d7-4e3d-847c-1a17daf0ff3e';
+  // Listado de barberos para que el cliente elija
+  barberosActivos: Barbero[] = [];
+  barberoSeleccionadoId: string = '';
 
   // Opciones de configuración de FullCalendar
   calendarOptions: CalendarOptions = {
@@ -70,6 +74,17 @@ export class CalendarioTurnos implements OnInit {
     console.log('[CalendarioTurnos] ngOnInit invocado');
     this.cargarServicios();
     this.cargarTurnosDelCalendario();
+    this.cargarBarberosActivos();
+  }
+
+  cargarBarberosActivos(): void {
+    this.barberoService.getBarberosActivos().subscribe({
+      next: (barberos) => {
+        this.barberosActivos = barberos;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('[CalendarioTurnos] Error al cargar barberos', err)
+    });
   }
 
   /**
@@ -147,6 +162,7 @@ export class CalendarioTurnos implements OnInit {
     this.servicioSeleccionado = servicio;
     this.modalAbierto = true;
     this.fechaModal = '';
+    this.barberoSeleccionadoId = '';
     this.horariosDisponibles = [];
     this.horarioSeleccionado = null;
     this.mensajeExito = null;
@@ -159,6 +175,7 @@ export class CalendarioTurnos implements OnInit {
     this.modalAbierto = false;
     this.servicioSeleccionado = null;
     this.fechaModal = '';
+    this.barberoSeleccionadoId = '';
     this.horariosDisponibles = [];
     this.horarioSeleccionado = null;
     this.cdr.detectChanges();
@@ -189,20 +206,29 @@ export class CalendarioTurnos implements OnInit {
   }
 
   /**
+   * Si cambia el barbero, limpiar horarios y buscar de nuevo si ya hay fecha.
+   */
+  onBarberoChange(): void {
+    if (this.fechaModal) {
+      this.onFechaChange();
+    }
+  }
+
+  /**
    * Cuando el usuario cambia la fecha, consulta los horarios disponibles al backend.
    */
   onFechaChange(): void {
     this.horarioSeleccionado = null;
     this.horariosDisponibles = [];
 
-    if (!this.fechaModal || !this.servicioSeleccionado) return;
+    if (!this.fechaModal || !this.servicioSeleccionado || !this.barberoSeleccionadoId) return;
 
     this.cargandoHorarios = true;
     this.cdr.detectChanges();
 
     console.log('[CalendarioTurnos] Consultando disponibilidad para fecha:', this.fechaModal);
     this.turnoService.getDisponibilidad(
-      this.BARBERO_ID,
+      this.barberoSeleccionadoId,
       this.fechaModal,
       this.servicioSeleccionado.servicio_id
     ).subscribe({
@@ -237,7 +263,7 @@ export class CalendarioTurnos implements OnInit {
       return;
     }
 
-    if (!this.servicioSeleccionado || !this.fechaModal || !this.horarioSeleccionado) return;
+    if (!this.servicioSeleccionado || !this.fechaModal || !this.horarioSeleccionado || !this.barberoSeleccionadoId) return;
 
     this.cargandoReserva = true;
     this.cdr.detectChanges();
@@ -245,9 +271,9 @@ export class CalendarioTurnos implements OnInit {
     const turno = {
       fecha: this.fechaModal,
       hora_inicio: this.horarioSeleccionado.hora_inicio,
-      clienteId: clienteId,
-      barberoId: this.BARBERO_ID,
-      servicioId: this.servicioSeleccionado.servicio_id,
+      cliente_id: clienteId,
+      barbero_id: this.barberoSeleccionadoId,
+      servicio_id: this.servicioSeleccionado.servicio_id,
       notas: 'Reserva desde la vista cliente'
     };
 
