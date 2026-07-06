@@ -9,6 +9,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/login/login').then(m => m.Login)
   },
   {
+    path: 'auth/google',
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
+  },
+  {
     path: 'formulario',
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion)
   },
@@ -25,6 +29,11 @@ export const routes: Routes = [
         path: 'perfil',
         canActivate: [authGuard],
         loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil)
+      },
+      {
+        path: 'cliente/turnos',
+        canActivate: [authGuard],
+        loadComponent: () => import('./components/calendario-turnos/calendario-turnos').then(m => m.CalendarioTurnos)
       },
 
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)

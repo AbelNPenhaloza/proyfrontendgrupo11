@@ -13,32 +13,36 @@ export class GoogleCallback implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-ngOnInit() {
-  this.route.queryParams.subscribe(params => {
-    const token = params['token'];
-    
-    if (token) {
-      localStorage.setItem('auth_token', token);
+  ngOnInit() {
+    // Capturamos el token de la URL (query params)
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
       
-      const payload = this.decodeJwtResponse(token);
-      if (payload && payload.rol) {
-        localStorage.setItem('role', payload.rol);
-      }
+      if (token) {
+        // Guardamos el token en localStorage (igual que en tu auth.service normal)
+        localStorage.setItem('auth_token', token);
+        
+        // Decodificamos el JWT para extraer el rol (Lógica sugerida por la cátedra)
+        const payload = this.decodeJwtResponse(token);
+        if (payload && payload.rol) {
+          localStorage.setItem('role', payload.rol);
+        }
 
-      if (this.authService.isAdmin()) {
-        this.router.navigate(['/admin/dashboard']);
-      } else if (this.authService.isBarbero()) {
-        this.router.navigate(['/barbero/dashboard']);
+        // Redirección inteligente usando los métodos que ya tienes en AuthService
+        if (this.authService.isAdmin()) {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (this.authService.isBarbero()) {
+          this.router.navigate(['/barbero/dashboard']);
+        } else {
+          this.router.navigate(['/cliente/turnos']);
+        }
       } else {
-        alert('¡Login con Google exitoso! Bienvenido.');
-        this.router.navigate(['/home']);
+        // Si no hay token en la URL, devolvemos al usuario al login
+        this.router.navigate(['/login']);
       }
-    } else {
-      this.router.navigate(['/home']);
-    }
-    
-  });
-}
+    });
+  }
+
   // Método basado en el apunte de la cátedra para decodificar JWT manualmente
   private decodeJwtResponse(token: string): any {
     try {
@@ -54,5 +58,3 @@ ngOnInit() {
     }
   }
 }
-
-
