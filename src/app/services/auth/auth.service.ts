@@ -27,11 +27,26 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/register`, userData);
   }
 
+  // === PARA LA AUDITORÍA ===
   logout(): void {
+    const token = this.getToken();
+    if (token) {
+      // Avisamos al backend para que audite el LOGOUT
+      this.http.post(`${this.API_URL}/logout`, {}).subscribe({
+        next: () => this.limpiarSesion(),
+        error: () => this.limpiarSesion() // Si falla, borramos la sesión igual por seguridad
+      });
+    } else {
+      this.limpiarSesion();
+    }
+  }
+
+  // Método auxiliar privado para no repetir código
+  private limpiarSesion(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('role');
   }
-
+  
   isAuthenticated(): boolean {
     return !!localStorage.getItem('auth_token');
   }
@@ -51,10 +66,11 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('auth_token');
   }
+  
   getUsuarioId(): string | null {
-  const token = this.getToken();
-  if (!token) return null;
-  const payload = JSON.parse(atob(token.split('.')[1]));
-  return payload.usuario_id || null;
+    const token = this.getToken();
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.usuario_id || null;
   }
 }
