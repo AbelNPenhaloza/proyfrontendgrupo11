@@ -8,7 +8,7 @@ import { Home } from './components/home/home';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, NavbarComponent, Home, NavbarBarberoComponent, NavbarClienteComponent],
+  imports: [RouterOutlet, RouterLink, NavbarComponent, NavbarBarberoComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
