@@ -95,9 +95,12 @@ export class CalendarioTurnos implements OnInit {
       next: (turnosRegistrados) => {
         this.turnos = turnosRegistrados;
         
-        // Mapear los turnos al formato que FullCalendar requiere para sus eventos
+        const miUsuarioId = this.authService.getUsuarioId();
+
+        // Mapear los turnos al formato que FullCalendar requiere, 
+        // filtrando SOLO los turnos del cliente logueado (privacidad)
         const eventosMapeados = this.turnos
-          .filter(t => t.estado !== 'CANCELADO')
+          .filter(t => t.estado !== 'CANCELADO' && t.cliente_id === miUsuarioId)
           .map(t => ({
             title: t.nombreServicio || 'Turno Reservado',
             start: `${t.fecha}T${t.hora_inicio}`,
