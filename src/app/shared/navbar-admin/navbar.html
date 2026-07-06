@@ -1,50 +1,97 @@
 @if (isAuthenticated()) {
-<nav class="navbar navbar-expand-lg sticky-top">
-  <div class="container-fluid px-3">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div #navbarCollapse class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact: true}" (click)="closeNavbar()">
-            <i class="bi bi-speedometer2 me-1"></i>Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/turnos" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="bi bi-calendar-check me-1"></i>Turnos
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/pagos" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="bi bi-cash me-1"></i>Pagos
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/usuarios" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="bi bi-people me-1"></i>Usuarios
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/barberos" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="bi bi-person-badge me-1"></i>Barberos
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/admin/servicios" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="bi bi-gear me-1"></i>Servicios
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="logout()" style="cursor: pointer;">
-            <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
-          </a>
-        </li>
-      </ul>
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div #navbarCollapse class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/dashboard"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-speedometer2 me-1"></i>Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/turnos"
+              routerLinkActive="active"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-calendar-check me-1"></i>Turnos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/pagos"
+              routerLinkActive="active"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-cash me-1"></i>Pagos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/usuarios"
+              routerLinkActive="active"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-people me-1"></i>Usuarios
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/barberos"
+              routerLinkActive="active"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-person-badge me-1"></i>Barberos
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/servicios"
+              routerLinkActive="active"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-gear me-1"></i>Servicios
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              routerLink="/admin/auditoria"
+              routerLinkActive="active"
+              (click)="closeNavbar()"
+            >
+              <i class="bi bi-shield-lock me-1"></i>Auditoría
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="logout()" style="cursor: pointer">
+              <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 }
