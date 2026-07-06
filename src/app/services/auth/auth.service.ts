@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { LoginModel } from '../../models/auth/login.model';
 import { RegisterModel } from '../../models/auth/register.model';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
+  private router = inject(Router);
   private readonly API_URL = 'http://localhost:3000/api/auth';
 
   login(credentials: LoginModel): Observable<any> {
@@ -45,6 +47,7 @@ export class AuthService {
   private limpiarSesion(): void {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('role');
+    this.router.navigate(['/login']);
   }
   
   isAuthenticated(): boolean {
