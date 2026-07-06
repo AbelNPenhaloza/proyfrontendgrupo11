@@ -18,7 +18,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
   if (state.url.includes('/barbero') && !authService.isBarbero()) {
-    router.navigate(['/login']);
+    router.navigate(['/home']); // Redirigir al inicio o dashboard cliente
     return false;
   }
   return true;

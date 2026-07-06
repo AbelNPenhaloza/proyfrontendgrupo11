@@ -17,25 +17,21 @@
 
         <div class="mb-3">
           <label class="fw-semibold">Nombre</label>
-          @if (editando) {
-            <input type="text" class="form-control" [(ngModel)]="perfil.nombre">
-          } @else {
-            <p class="form-control-plaintext">{{ perfil.nombre }}</p>
-          }
+          <p class="form-control-plaintext">{{ perfil.nombre }}</p>
         </div>
 
         <div class="mb-3">
           <label class="fw-semibold">Apellido</label>
-          @if (editando) {
-            <input type="text" class="form-control" [(ngModel)]="perfil.apellido">
-          } @else {
-            <p class="form-control-plaintext">{{ perfil.apellido }}</p>
-          }
+          <p class="form-control-plaintext">{{ perfil.apellido }}</p>
         </div>
 
         <div class="mb-3">
           <label class="fw-semibold">Email</label>
-          <p class="form-control-plaintext">{{ perfil.email }}</p>
+          @if (editando) {
+            <input type="email" class="form-control" [(ngModel)]="perfil.email">
+          } @else {
+            <p class="form-control-plaintext">{{ perfil.email }}</p>
+          }
         </div>
 
         <div class="mb-3">
