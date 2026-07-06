@@ -15,6 +15,18 @@
           <input type="text" class="form-control" name="nombre_completo" [(ngModel)]="barbero.nombre_completo" required placeholder="Ej. Carlos López">
         </div>
 
+        @if (!esEdicion) {
+          <div class="mb-3">
+            <label class="form-label fw-bold">Email de Acceso</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="barbero.email" required placeholder="barbero@barberia.com">
+          </div>
+  
+          <div class="mb-3">
+            <label class="form-label fw-bold">Contraseña</label>
+            <input type="password" class="form-control" name="password" [(ngModel)]="barbero.password" required placeholder="Minimo 6 caracteres">
+          </div>
+        }
+
         <div class="mb-3">
           <label class="form-label fw-bold">Especialidad Principal</label>
           <select class="form-select" name="especialidad" [(ngModel)]="barbero.especialidad">

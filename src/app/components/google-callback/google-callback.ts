@@ -13,36 +13,32 @@ export class GoogleCallback implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
 
-  ngOnInit() {
-    // Capturamos el token de la URL (query params)
-    this.route.queryParams.subscribe(params => {
-      const token = params['token'];
+ngOnInit() {
+  this.route.queryParams.subscribe(params => {
+    const token = params['token'];
+    
+    if (token) {
+      localStorage.setItem('auth_token', token);
       
-      if (token) {
-        // Guardamos el token en localStorage (igual que en tu auth.service normal)
-        localStorage.setItem('auth_token', token);
-        
-        // Decodificamos el JWT para extraer el rol (Lógica sugerida por la cátedra)
-        const payload = this.decodeJwtResponse(token);
-        if (payload && payload.rol) {
-          localStorage.setItem('role', payload.rol);
-        }
-
-        // Redirección inteligente usando los métodos que ya tienes en AuthService
-        if (this.authService.isAdmin()) {
-          this.router.navigate(['/admin/dashboard']);
-        } else {
-          // Vista del cliente
-          alert('¡Login con Google exitoso! Bienvenido.');
-          this.router.navigate(['/']); 
-        }
-      } else {
-        // Si no hay token en la URL, devolvemos al usuario al login
-        this.router.navigate(['/login']);
+      const payload = this.decodeJwtResponse(token);
+      if (payload && payload.rol) {
+        localStorage.setItem('role', payload.rol);
       }
-    });
-  }
 
+      if (this.authService.isAdmin()) {
+        this.router.navigate(['/admin/dashboard']);
+      } else if (this.authService.isBarbero()) {
+        this.router.navigate(['/barbero/dashboard']);
+      } else {
+        alert('¡Login con Google exitoso! Bienvenido.');
+        this.router.navigate(['/home']);
+      }
+    } else {
+      this.router.navigate(['/home']);
+    }
+    
+  });
+}
   // Método basado en el apunte de la cátedra para decodificar JWT manualmente
   private decodeJwtResponse(token: string): any {
     try {
@@ -58,3 +54,5 @@ export class GoogleCallback implements OnInit {
     }
   }
 }
+
+

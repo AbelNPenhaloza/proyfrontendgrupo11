@@ -48,7 +48,9 @@ export class TurnoForm implements OnInit {
     // Cargar listas para los desplegables con manejo de errores y formatos
     this.barberoService.getBarberos().subscribe({
       next: (data: any) => {
-        this.barberos = Array.isArray(data) ? data : (data.barberos || data.data || []);
+        const listaBarberos = Array.isArray(data) ? data : (data.barberos || data.data || []);
+        // Solo mostrar barberos activos en el formulario
+        this.barberos = listaBarberos.filter((b: any) => b.activo !== false);
       },
       error: (err) => console.error('Error cargando barberos:', err)
     });
@@ -63,8 +65,8 @@ export class TurnoForm implements OnInit {
     this.usuarioService.getUsuarios().subscribe({
       next: (data: any) => {
         const usuarios = Array.isArray(data) ? data : (data.usuarios || data.data || []);
-        // Solo mostrar los que son clientes, o mostrarlos todos si quieres
-        this.clientes = usuarios;
+        // Solo mostrar clientes que estén activos
+        this.clientes = usuarios.filter((u: any) => u.activo !== false);
       },
       error: (err) => console.error('Error cargando clientes:', err)
     });

@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CatalogoServiciosComponent } from '../catalogo-servicios/catalogo-servicios';
 import { CalendarioTurnos } from '../calendario-turnos/calendario-turnos';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, CatalogoServiciosComponent, CalendarioTurnos],
+  imports: [CommonModule, CalendarioTurnos],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
-  // Acá sumaremos más adelante la interacción con el calendario
+export class Home implements OnInit {
+  constructor() {
+    console.log('[Home] Constructor invocado');
+  }
+
+  ngOnInit(): void {
+    console.log('[Home] ngOnInit invocado');
+  }
 }

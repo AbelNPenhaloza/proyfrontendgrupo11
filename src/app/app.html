@@ -1,7 +1,17 @@
 @if (authService.isAuthenticated() && authService.isAdmin()) {
   <app-navbar></app-navbar>
   <main class="main-content">
-    <router-outlet />
+    <div><router-outlet /></div>
+  </main>
+} @else if (authService.isAuthenticated() && authService.isBarbero()) {
+  <app-navbar-barbero></app-navbar-barbero>
+  <main class="main-content">
+    <div><router-outlet /></div>
+  </main>
+} @else if (authService.isAuthenticated()) {
+  <app-navbar-cliente></app-navbar-cliente>
+  <main class="main-content">
+    <div><router-outlet /></div>
   </main>
 } @else {
   <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
@@ -13,6 +23,7 @@
       </div>
     </div>
   </nav>
-  
-  <router-outlet />
+  <main class="main-content">
+    <div><router-outlet /></div>
+  </main>
 }

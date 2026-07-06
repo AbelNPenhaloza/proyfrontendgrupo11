@@ -28,14 +28,13 @@ export class Login {
       
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          // Redirigimos inteligentemente según el rol guardado
           if (this.authService.isAdmin()) {
             this.router.navigate(['/admin']);
+          } else if (this.authService.isBarbero()) {
+            this.router.navigate(['/barbero/dashboard']);
           } else {
-            //this.router.navigate(['/']); // Ruta principal para el CLIENTE
-            // Opción B: Mensaje temporal para el CLIENTE hasta que el compañero haga el Home
-            alert('¡Login exitoso! Bienvenido (La vista del cliente está en construcción)');
-            this.loginForm.reset(); // Limpiamos el formulario
+            alert('¡Login exitoso! Bienvenido a la barbería.');
+            this.router.navigate(['/home']);
           }
         },
         error: (err) => {

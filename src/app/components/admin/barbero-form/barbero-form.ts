@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { BarberoService } from '../../../services/barbero.service';
+import { UsuarioService } from '../../../services/usuario.service';
 import { Barbero } from '../../../models/barbero.model';
 
 @Component({
@@ -13,6 +14,7 @@ import { Barbero } from '../../../models/barbero.model';
 })
 export class BarberoForm implements OnInit {
   private barberoService = inject(BarberoService);
+  private usuarioService = inject(UsuarioService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -24,7 +26,9 @@ export class BarberoForm implements OnInit {
   barbero: any = {
     nombre_completo: '',
     especialidad: 'CLASICO',
-    activo: true
+    activo: true,
+    email: '',
+    password: ''
   };
 
   ngOnInit() {
@@ -59,14 +63,32 @@ export class BarberoForm implements OnInit {
         }
       });
     } else {
-      this.barberoService.createBarbero(this.barbero).subscribe({
-        next: () => {
-          alert('Barbero creado correctamente');
-          this.router.navigate(['/admin/barberos']);
+      // Flujo de creación: 1. Crear Usuario, 2. Crear Barbero vinculado
+      this.usuarioService.createUsuarioAdmin({
+        nombre: this.barbero.nombre_completo,
+        email: this.barbero.email,
+        password: this.barbero.password,
+        rol: 'BARBERO'
+      }).subscribe({
+        next: (res: any) => {
+          // Una vez creada la cuenta, creamos el perfil del barbero con el ID
+          this.barbero.usuario_id = res.usuario_id;
+          
+          this.barberoService.createBarbero(this.barbero).subscribe({
+            next: () => {
+              alert('Barbero creado correctamente con su cuenta de acceso');
+              this.router.navigate(['/admin/barberos']);
+            },
+            error: (err) => {
+              console.error(err);
+              alert('Error al crear el perfil de barbero');
+              this.cargando = false;
+            }
+          });
         },
         error: (err) => {
           console.error(err);
-          alert('Error al crear el barbero');
+          alert('Error al crear la cuenta de usuario. Quizás el email ya existe.');
           this.cargando = false;
         }
       });
