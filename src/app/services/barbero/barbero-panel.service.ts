@@ -14,8 +14,8 @@ export class BarberoPanelService {
   }
 
   // Marcar turno como atendido
-  marcarAtendido(turnoId: string): Observable<any> {
-    return this.http.put(`${this.API_URL}/turnos/${turnoId}/estado`, { estado: 'ATENDIDO' });
+  marcarAtendido(turnoId: string, estado: string = 'ATENDIDO'): Observable<any> {
+    return this.http.put(`${this.API_URL}/turnos/${turnoId}/estado`, { estado });
   }
 
   // Obtener disponibilidad del barbero

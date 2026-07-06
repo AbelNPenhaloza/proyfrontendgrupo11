@@ -15,6 +15,27 @@
         <input formControlName="email" class="form-control" type="email">
       </div>
       <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+
+        <div class="input-group">
+          <input
+            formControlName="password"
+            class="form-control"
+            [type]="mostrarPassword ? 'text' : 'password'">
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="togglePassword()">
+
+            <i class="bi"
+              [ngClass]="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'">
+            </i>
+
+          </button>
+        </div>
+      </div>
+      <div class="mb-3">
         <label class="form-label">Celular</label>
         <input formControlName="celular" class="form-control" type="text">
       </div>

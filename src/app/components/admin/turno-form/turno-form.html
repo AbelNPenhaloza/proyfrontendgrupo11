@@ -17,14 +17,45 @@
       } @else {
       <form (ngSubmit)="guardar()" #turnoForm="ngForm">
 
-        <div class="mb-3">
+        <div class="mb-3 position-relative">
           <label class="form-label fw-bold">Cliente</label>
-          <select class="form-select" name="clienteId" [(ngModel)]="turno.clienteId" required>
-            <option value="" disabled>-- Seleccionar cliente --</option>
-            @for (cliente of clientes; track cliente.usuario_id) {
-              <option [value]="cliente.usuario_id">{{ cliente.nombre }} {{ cliente.apellido }} ({{ cliente.email }})</option>
-            }
-          </select>
+          <input
+            type="text"
+            class="form-control"
+            name="busquedaCliente"
+            [(ngModel)]="busquedaCliente"
+            (input)="filtrarClientes()"
+            (focus)="filtrarClientes()"
+            (blur)="ocultarDropdownConDelay()"
+            placeholder="Buscar cliente por nombre o email..."
+            autocomplete="off">
+
+          <!-- Campo real que viaja en el form -->
+          <input type="hidden" name="clienteId" [(ngModel)]="turno.clienteId" required>
+
+          @if (mostrarDropdown) {
+            <div class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000; max-height: 220px; overflow-y: auto;">
+              @if (clientesFiltrados.length > 0) {
+                @for (cliente of clientesFiltrados; track cliente.usuario_id) {
+                  <button type="button" class="list-group-item list-group-item-action"
+                          (click)="seleccionarCliente(cliente)">
+                    {{ cliente.nombre }} {{ cliente.apellido }}
+                    <small class="text-muted d-block">{{ cliente.email }}</small>
+                  </button>
+                }
+              } @else {
+                <button type="button" class="list-group-item list-group-item-action text-primary"
+                        (click)="irACrearUsuario()">
+                  <i class="bi bi-person-plus-fill me-1"></i>
+                  No se encontró "{{ busquedaCliente }}". Crear nuevo cliente
+                </button>
+              }
+            </div>
+          }
+
+          @if (!turno.clienteId && busquedaCliente) {
+            <small class="text-danger">Seleccioná un cliente de la lista.</small>
+          }
         </div>
 
         <div class="mb-3">

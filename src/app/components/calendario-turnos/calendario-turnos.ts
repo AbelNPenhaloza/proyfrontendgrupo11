@@ -114,10 +114,10 @@ export class CalendarioTurnos implements OnInit {
     this.turnoService.getTurnos().subscribe({
       next: (turnosRegistrados) => {
         this.turnos = turnosRegistrados;
-        
+
         const miUsuarioId = this.authService.getUsuarioId();
 
-        // Mapear los turnos al formato que FullCalendar requiere, 
+        // Mapear los turnos al formato que FullCalendar requiere,
         // filtrando SOLO los turnos del cliente logueado (privacidad)
         const eventosMapeados = this.turnos
           .filter(t => t.estado !== 'CANCELADO' && t.cliente_id === miUsuarioId)
@@ -267,13 +267,13 @@ export class CalendarioTurnos implements OnInit {
 
     this.cargandoReserva = true;
     this.cdr.detectChanges();
-
+    
     const turno = {
       fecha: this.fechaModal,
       hora_inicio: this.horarioSeleccionado.hora_inicio,
-      cliente_id: clienteId,
-      barbero_id: this.barberoSeleccionadoId,
-      servicio_id: this.servicioSeleccionado.servicio_id,
+      clienteId: clienteId,
+      barberoId: this.barberoSeleccionadoId,
+      servicioId: this.servicioSeleccionado.servicio_id,
       notas: 'Reserva desde la vista cliente'
     };
 
@@ -281,11 +281,11 @@ export class CalendarioTurnos implements OnInit {
     this.turnoService.crearTurno(turno).subscribe({
       next: (res) => {
         const turnoId = res.turno?.turno_id;
-        
+
         if (turnoId) {
           this.mensajeExito = `Turno reservado. Redirigiendo a MercadoPago...`;
           this.cdr.detectChanges();
-          
+
           this.turnoService.generarPago(turnoId).subscribe({
             next: (pagoRes) => {
               if (pagoRes.checkoutUrl) {

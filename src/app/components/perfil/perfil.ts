@@ -36,6 +36,11 @@ export class Perfil implements OnInit {
       error: (err) => console.error('Error al cargar perfil', err)
     });
   }
+  mostrarPassword = false;
+
+  togglePassword(): void {
+    this.mostrarPassword = !this.mostrarPassword;
+  }
 
   onSubmit() {
     if (this.perfilForm.valid) {

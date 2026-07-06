@@ -14,8 +14,20 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Usamos una signal para manejar el mensaje de error en la vista
   errorMessage = signal<string | null>(null);
+
+  constructor() {
+    // Si ya existe una sesión, redirigir según el rol
+    if (this.authService.isAuthenticated()) {
+      if (this.authService.isAdmin()) {
+        this.router.navigate(['/admin']);
+      } else if (this.authService.isBarbero()) {
+        this.router.navigate(['/barbero/dashboard']);
+      } else {
+        this.router.navigate(['/cliente/turnos']);
+      }
+    }
+  }
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -24,8 +36,8 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.errorMessage.set(null); // Limpiamos errores previos
-      
+      this.errorMessage.set(null);
+
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           if (this.authService.isAdmin()) {
@@ -38,11 +50,13 @@ export class Login {
         },
         error: (err) => {
           console.error('Error al iniciar sesión:', err);
-          this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
+          this.errorMessage.set(
+            'Credenciales incorrectas. Verifica tu email y contraseña.'
+          );
         }
       });
     } else {
-      this.loginForm.markAllAsTouched(); // Muestra los errores de validación si el usuario intentó enviar vacío
+      this.loginForm.markAllAsTouched();
     }
   }
 }

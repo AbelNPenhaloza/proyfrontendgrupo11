@@ -18,6 +18,7 @@ export class UsuarioForm implements OnInit {
   usuarioId: string | null = null;
   esEdicion = false;
   cargando = false;
+  returnUrl: string | null = null;
 
   usuario: any = {
     nombre: '',
@@ -33,6 +34,20 @@ export class UsuarioForm implements OnInit {
     if (this.usuarioId) {
       this.esEdicion = true;
       this.cargarUsuario(this.usuarioId);
+    }
+
+    // Precargar datos si venimos desde la búsqueda de clientes en "Crear Turno"
+    const qp = this.route.snapshot.queryParamMap;
+    this.returnUrl = qp.get('returnUrl');
+
+    if (!this.esEdicion) {
+      const nombre = qp.get('nombre');
+      const apellido = qp.get('apellido');
+      const email = qp.get('email');
+
+      if (nombre) this.usuario.nombre = nombre;
+      if (apellido) this.usuario.apellido = apellido;
+      if (email) this.usuario.email = email;
     }
   }
 
@@ -76,9 +91,18 @@ export class UsuarioForm implements OnInit {
       });
     } else {
       this.usuarioService.createUsuario(datos).subscribe({
-        next: () => {
-          alert('Usuario creado correctamente');
-          this.router.navigate(['/admin/usuarios']);
+        next: (res: any) => {
+          this.cargando = false;
+
+          if (this.returnUrl) {
+            // Volvemos al formulario de turno con el cliente recién creado ya seleccionado
+            this.router.navigate([this.returnUrl], {
+              queryParams: { clienteCreadoId: res?.usuario?.usuario_id }
+            });
+          } else {
+            alert('Usuario creado correctamente');
+            this.router.navigate(['/admin/usuarios']);
+          }
         },
         error: (err) => {
           console.error(err);

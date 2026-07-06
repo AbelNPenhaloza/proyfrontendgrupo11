@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BarberoPanelService } from '../../../services/barbero/barbero-panel.service';
 import { AuthService } from '../../../services/auth/auth.service';
+import { environment } from '../../../../environments/environment';
+import QRCode from 'qrcode';
 
 @Component({
   selector: 'app-barbero-dashboard',
@@ -23,9 +25,16 @@ export class BarberosDashboard implements OnInit {
   barberoId: string = '';
   cargando = true;
 
-  // --- Estado del modal de error (mismo patrón que en Mi Agenda) ---
   mostrarModalError = false;
   mensajeModalError = '';
+
+  mostrarModalCobro = false;
+  turnoCobrar: any = null;
+  procesandoCobro = false;
+
+  mostrarModalQR = false;
+  qrImageUrl: string = '';
+  checkoutUrl: string = '';
 
   ngOnInit(): void {
     const token = this.authService.getToken();
@@ -33,7 +42,7 @@ export class BarberosDashboard implements OnInit {
       const payload = JSON.parse(atob(token.split('.')[1]));
       this.barberoId = payload.barbero_id;
     }
-    this.cargarAgenda(); 
+    this.cargarAgenda();
   }
 
   cargarAgenda(): void {
@@ -52,8 +61,20 @@ export class BarberosDashboard implements OnInit {
     });
   }
 
-  marcarAtendido(turnoId: string): void {
-    this.barberoPanelService.marcarAtendido(turnoId).subscribe({
+  iniciarAtencion(turnoId: string): void {
+    this.barberoPanelService.marcarAtendido(turnoId, 'EN_ATENCION').subscribe({
+      next: () => this.cargarAgenda(),
+      error: (err) => {
+        const mensaje = err?.error?.error || 'No se pudo actualizar el turno.';
+        this.mensajeModalError = mensaje;
+        this.mostrarModalError = true;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  finalizarAtencion(turnoId: string): void {
+    this.barberoPanelService.marcarAtendido(turnoId, 'ATENDIDO').subscribe({
       next: () => this.cargarAgenda(),
       error: (err) => {
         const mensaje = err?.error?.error || 'No se pudo actualizar el turno.';
@@ -69,20 +90,74 @@ export class BarberosDashboard implements OnInit {
     this.mensajeModalError = '';
   }
 
-  cobrar(turno: any): void {
+  abrirModalCobro(turno: any): void {
+    this.turnoCobrar = turno;
+    this.mostrarModalCobro = true;
+    this.cdr.detectChanges();
+  }
+
+  cerrarModalCobro(): void {
+    this.mostrarModalCobro = false;
+    this.turnoCobrar = null;
+    this.procesandoCobro = false;
+  }
+
+  cobrarEfectivo(): void {
+    if (!this.turnoCobrar) return;
+    this.procesandoCobro = true;
     const token = this.authService.getToken();
     const headers = { Authorization: `Bearer ${token}` };
 
-    this.http.post('http://localhost:3000/api/pagos/generar',
-      { turnoId: turno.turno_id },
+    this.http.post(`${environment.API_BASE_URL}/pagos/registrar-efectivo`,
+      { turnoId: this.turnoCobrar.turno_id },
       { headers }
     ).subscribe({
-      next: (data: any) => {
-        window.open(data.checkoutUrl, '_blank');
+      next: () => {
+        const turno = this.turnosHoy.find(t => t.turno_id === this.turnoCobrar.turno_id);
+        if (turno) turno.cobrado = true;
+        this.cerrarModalCobro();
+        this.cargarAgenda();
       },
       error: (err) => {
-        console.error('Error al generar pago:', err);
+        this.cerrarModalCobro();
+        const mensaje = err?.error?.error || 'No se pudo registrar el pago.';
+        this.mensajeModalError = mensaje;
+        this.mostrarModalError = true;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  async cobrarOnline(): Promise<void> {
+    if (!this.turnoCobrar) return;
+    this.procesandoCobro = true;
+    const token = this.authService.getToken();
+    const headers = { Authorization: `Bearer ${token}` };
+
+    this.http.post(`${environment.API_BASE_URL}/pagos/generar`,
+      { turnoId: this.turnoCobrar.turno_id },
+      { headers }
+    ).subscribe({
+      next: async (data: any) => {
+        this.checkoutUrl = data.checkoutUrl;
+        this.qrImageUrl = await QRCode.toDataURL(data.checkoutUrl);
+        this.cerrarModalCobro();
+        this.mostrarModalQR = true;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.cerrarModalCobro();
+        const mensaje = err?.error?.error || 'No se pudo generar el link de pago.';
+        this.mensajeModalError = mensaje;
+        this.mostrarModalError = true;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  cerrarModalQR(): void {
+    this.mostrarModalQR = false;
+    this.qrImageUrl = '';
+    this.checkoutUrl = '';
   }
 }
