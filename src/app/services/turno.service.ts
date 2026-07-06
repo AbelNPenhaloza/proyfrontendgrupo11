@@ -143,4 +143,11 @@ export class TurnoService {
   getDisponibilidad(barberoId: string, fecha: string, servicioId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/disponibilidad?barberoId=${barberoId}&fecha=${fecha}&servicioId=${servicioId}`);
   }
+
+  /**
+   * Genera el link de pago en MercadoPago para un turno.
+   */
+  generarPago(turnoId: string): Observable<any> {
+    return this.http.post(`${environment.API_BASE_URL}/pagos/generar`, { turnoId });
+  }
 }

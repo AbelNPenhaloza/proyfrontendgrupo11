@@ -31,10 +31,10 @@ export class GoogleCallback implements OnInit {
         // Redirección inteligente usando los métodos que ya tienes en AuthService
         if (this.authService.isAdmin()) {
           this.router.navigate(['/admin/dashboard']);
+        } else if (this.authService.isBarbero()) {
+          this.router.navigate(['/barbero/dashboard']);
         } else {
-          // Vista del cliente
-          alert('¡Login con Google exitoso! Bienvenido.');
-          this.router.navigate(['/home']); 
+          this.router.navigate(['/cliente/turnos']);
         }
       } else {
         // Si no hay token en la URL, devolvemos al usuario al login

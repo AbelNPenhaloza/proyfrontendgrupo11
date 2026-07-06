@@ -39,8 +39,8 @@ export class CalendarioTurnos implements OnInit {
   // Fecha minima: no se puede reservar en el pasado
   readonly fechaMinima = new Date().toISOString().split('T')[0];
 
-  // Barbero asignado por defecto para las reservas del cliente
-  private readonly BARBERO_ID = 'c1b183ac-1d70-4f51-a968-3e4e672c2196';
+  // Barbero asignado por defecto para las reservas del cliente (Corregido con ID real)
+  private readonly BARBERO_ID = '31c08935-25d7-4e3d-847c-1a17daf0ff3e';
 
   // Opciones de configuración de FullCalendar
   calendarOptions: CalendarOptions = {
@@ -213,14 +213,32 @@ export class CalendarioTurnos implements OnInit {
 
     console.log('[CalendarioTurnos] Enviando reserva al backend:', turno);
     this.turnoService.crearTurno(turno).subscribe({
-      next: () => {
-        this.cargandoReserva = false;
-        this.mensajeExito = `Turno reservado el ${this.fechaModal} a las ${this.horarioSeleccionado!.hora_inicio}.`;
-        this.cerrarModal();
+      next: (res) => {
+        const turnoId = res.turno?.turno_id;
         
-        // Recargar los turnos para actualizar dinámicamente el calendario
-        this.cargarTurnosDelCalendario();
-        this.cdr.detectChanges();
+        if (turnoId) {
+          this.mensajeExito = `Turno reservado. Redirigiendo a MercadoPago...`;
+          this.cdr.detectChanges();
+          
+          this.turnoService.generarPago(turnoId).subscribe({
+            next: (pagoRes) => {
+              if (pagoRes.checkoutUrl) {
+                window.location.href = pagoRes.checkoutUrl;
+              }
+            },
+            error: () => {
+              this.cargandoReserva = false;
+              this.mensajeError = 'Turno creado pero falló la redirección a MercadoPago.';
+              this.cdr.detectChanges();
+            }
+          });
+        } else {
+          this.cargandoReserva = false;
+          this.mensajeExito = `Turno reservado el ${this.fechaModal} a las ${this.horarioSeleccionado!.hora_inicio}.`;
+          this.cerrarModal();
+          this.cargarTurnosDelCalendario();
+          this.cdr.detectChanges();
+        }
       },
       error: (err) => {
         console.error('[CalendarioTurnos] Error al reservar turno:', err);

@@ -8,11 +8,31 @@
   <main class="main-content">
     <router-outlet />
   </main>
+} @else if (authService.isAuthenticated()) {
+  <!-- NAVBAR PARA CLIENTES LOGUEADOS -->
+  <nav class="navbar navbar-expand-lg" style="background-color: #14213D; border-bottom: 3px solid #A8201A;">
+    <div class="container-fluid px-3 d-flex justify-content-between align-items-center">
+      <a class="navbar-brand text-white fw-bold d-flex align-items-center" routerLink="/cliente/turnos">
+        <i class="bi bi-scissors fs-4 me-2" style="color: #F4F1DE;"></i> Barbería 11
+      </a>
+      <div class="d-flex align-items-center gap-3">
+        <a class="nav-link text-white text-uppercase" routerLink="/cliente/turnos" style="font-size: 0.9rem; letter-spacing: 1px;"><i class="bi bi-calendar-plus me-1"></i>Reservar</a>
+        <a class="nav-link text-white text-uppercase" routerLink="/perfil" style="font-size: 0.9rem; letter-spacing: 1px;"><i class="bi bi-person-circle me-1"></i>Perfil</a>
+        <button class="btn px-3 py-1 rounded-pill text-white fw-bold text-uppercase shadow-sm" (click)="logout()" style="background-color: #A8201A; border: none; font-size: 0.8rem;">
+          <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+        </button>
+      </div>
+    </div>
+  </nav>
+  <main class="main-content">
+    <router-outlet />
+  </main>
 } @else {
+  <!-- VISITANTES NO LOGUEADOS -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
     <div class="container">
       <a class="navbar-brand" href="#">Barbería 11</a>
-      <div class="navbar-nav">
+      <div class="navbar-nav ms-auto">
         <a class="nav-link" routerLink="/login">Login</a>
         <a class="nav-link" routerLink="/formulario">Registro</a>
       </div>

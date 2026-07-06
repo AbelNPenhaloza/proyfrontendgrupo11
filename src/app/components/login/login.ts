@@ -33,8 +33,7 @@ export class Login {
           } else if (this.authService.isBarbero()) {
             this.router.navigate(['/barbero/dashboard']);
           } else {
-            alert('¡Login exitoso! Bienvenido (La vista del cliente está en construcción)');
-            this.loginForm.reset();
+            this.router.navigate(['/cliente/turnos']);
           }
         },
         error: (err) => {
