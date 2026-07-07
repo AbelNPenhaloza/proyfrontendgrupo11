@@ -9,23 +9,40 @@ export const routes: Routes = [
     loadComponent: () => import('./components/login/login').then(m => m.Login)
   },
   {
+    path: 'auth/google',
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
+  },
+  { path: 'pago/exitoso', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  { path: 'pago/fallido', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  { path: 'pago/pendiente', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  {
     path: 'formulario',
     loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion)
   },
   {
-  path: 'auth/google',
-  loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
+    path: 'auth/google',
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
   },
   {
-        path: 'home',
-        canActivate: [authGuard],
-        loadComponent: () => import('./components/home/home').then(m => m.Home)
-      },
-      {
-        path: 'perfil',
-        canActivate: [authGuard],
-        loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil)
-      },
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/home/home').then(m => m.Home)
+  },
+  {
+    path: 'perfil',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil)
+  },
+  {
+    path: 'cliente/turnos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/calendario-turnos/calendario-turnos').then(m => m.CalendarioTurnos)
+  },
+  {
+    path: 'cliente/ia',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/cliente/recomendacion-ia/recomendacion-ia').then(m => m.RecomendacionIa)
+  },
 
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   {
@@ -88,7 +105,11 @@ export const routes: Routes = [
       {
         path: 'servicios/editar/:id',
         loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm)
-      }
+      },
+      {
+        path: 'auditoria',
+        loadComponent: () => import('./components/admin/auditoria-table/auditoria-table').then(m => m.AuditoriaTable)
+      },
     ]
   },
   // Rutas del barbero

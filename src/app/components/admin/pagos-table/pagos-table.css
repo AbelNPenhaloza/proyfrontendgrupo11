@@ -6,7 +6,7 @@
 }
 
 .table-container h4 {
-  color: #1a1a2e;
+  color: var(--secondary-color);
   font-size: 1.1rem;
 }
 

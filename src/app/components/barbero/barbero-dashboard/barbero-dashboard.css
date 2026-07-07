@@ -4,33 +4,33 @@
 }
 
 .card a {
-  color: #14213D;
+  color: var(--secondary-color);
   transition: all 0.2s;
 }
 
 .card a:hover {
-  color: #A8201A;
+  color: var(--primary-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .card-header {
-  background-color: #14213D !important;
-  color: #F4F1DE;
+  background-color: var(--secondary-color) !important;
+  color: var(--light-bg);
 }
 
 .badge.bg-warning {
-  background-color: #5C3D2E !important;
+  background-color: var(--accent-brown) !important;
 }
 
 body, .dashboard-container {
-  background-color: #F4F1DE;
+  background-color: var(--light-bg);
 }
 
 h2 {
-  color: #14213D;
+  color: var(--secondary-color);
 }
 
 .text-muted {
-  color: #5C3D2E !important;
+  color: var(--accent-brown) !important;
 }

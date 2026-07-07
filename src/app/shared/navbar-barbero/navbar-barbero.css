@@ -1,11 +1,11 @@
 nav {
-  background-color: #14213D !important;
+  background-color: var(--secondary-color) !important;
 }
 
 .nav-link {
-  color: #F4F1DE !important;
+  color: var(--light-bg) !important;
 }
 
 .nav-link:hover, .nav-link.active {
-  color: #A8201A !important;
+  color: var(--primary-color) !important;
 }

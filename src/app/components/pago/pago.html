@@ -1,1 +1,25 @@
-<p>pago works!</p>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg border-0 rounded-4 text-center p-5" style="max-width: 500px;">
+    
+    @if (estado() === 'cargando') {
+      <div class="spinner-border text-primary mx-auto mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+      <h3 class="fw-bold" style="color: #14213D;">Procesando tu pago...</h3>
+      <p class="text-muted">Por favor no cierres esta ventana.</p>
+    }
+
+    @if (estado() === 'exito') {
+      <i class="bi bi-check-circle-fill text-success mx-auto mb-3" style="font-size: 4rem;"></i>
+      <h3 class="fw-bold text-success">¡Pago Confirmado!</h3>
+      <p class="text-muted mb-4">Tu turno ha sido pagado y confirmado exitosamente. Te esperamos en la barbería.</p>
+      <a routerLink="/cliente/turnos" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">Volver al Inicio</a>
+    }
+
+    @if (estado() === 'error') {
+      <i class="bi bi-x-circle-fill text-danger mx-auto mb-3" style="font-size: 4rem;"></i>
+      <h3 class="fw-bold text-danger">Operación Fallida</h3>
+      <p class="text-muted mb-4">{{ mensajeError() }}</p>
+      <a routerLink="/cliente/turnos" class="btn btn-outline-danger rounded-pill px-4 py-2 fw-bold">Volver a intentar</a>
+    }
+
+  </div>
+</div>

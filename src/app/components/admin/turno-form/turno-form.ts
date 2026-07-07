@@ -30,7 +30,12 @@ export class TurnoForm implements OnInit {
   barberos: any[] = [];
   servicios: any[] = [];
   clientes: any[] = [];
-  
+
+  // --- Búsqueda de cliente ---
+  busquedaCliente: string = '';
+  clientesFiltrados: any[] = [];
+  mostrarDropdown = false;
+
   // Lista de horarios traída del backend
   horariosDisponibles: any[] = [];
   cargandoHorarios = false;
@@ -67,6 +72,9 @@ export class TurnoForm implements OnInit {
         const usuarios = Array.isArray(data) ? data : (data.usuarios || data.data || []);
         // Solo mostrar clientes que estén activos
         this.clientes = usuarios.filter((u: any) => u.activo !== false);
+        this.clientesFiltrados = this.clientes;
+        this.sincronizarClienteSeleccionado();
+        this.seleccionarClienteRecienCreado();
       },
       error: (err) => console.error('Error cargando clientes:', err)
     });
@@ -90,6 +98,7 @@ export class TurnoForm implements OnInit {
           servicioId: encontrado.servicio_id,
           notas: encontrado.notas || ''
         };
+        this.sincronizarClienteSeleccionado();
       }
     });
   }
@@ -117,6 +126,103 @@ export class TurnoForm implements OnInit {
           }
         });
     }
+  }
+
+  // ============================
+  // Búsqueda / selección de cliente
+  // ============================
+
+  /** Normaliza texto para comparar sin importar tildes/mayúsculas */
+  private normalizar(texto: string): string {
+    return (texto || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  /** Si ya tenemos clienteId (ej: modo edición) y llegaron los clientes, mostramos el texto */
+  private sincronizarClienteSeleccionado() {
+    if (this.turno.clienteId && this.clientes.length) {
+      const cliente = this.clientes.find(c => c.usuario_id === this.turno.clienteId);
+      if (cliente) {
+        this.busquedaCliente = `${cliente.nombre} ${cliente.apellido} (${cliente.email})`;
+      }
+    }
+  }
+
+  /** Si venimos de crear un usuario nuevo desde este mismo form, lo seleccionamos automáticamente */
+  private seleccionarClienteRecienCreado() {
+    const clienteCreadoId = this.route.snapshot.queryParamMap.get('clienteCreadoId');
+    if (clienteCreadoId) {
+      const cliente = this.clientes.find(c => c.usuario_id === clienteCreadoId);
+      if (cliente) {
+        this.seleccionarCliente(cliente);
+      } else {
+        // Por si el usuario recién creado todavía no vino en el listado de "activos"
+        this.turno.clienteId = clienteCreadoId;
+      }
+
+      // Limpiamos el queryParam de la URL para que no se reaplique en un refresh
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { clienteCreadoId: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+    }
+  }
+
+  filtrarClientes() {
+    this.mostrarDropdown = true;
+    const termino = this.normalizar(this.busquedaCliente.trim());
+
+    this.clientesFiltrados = !termino
+      ? this.clientes
+      : this.clientes.filter(c => {
+          const nombreCompleto = this.normalizar(`${c.nombre} ${c.apellido}`);
+          const email = this.normalizar(c.email || '');
+          return nombreCompleto.includes(termino) || email.includes(termino);
+        });
+
+    // Si el texto ya no coincide con el cliente seleccionado, invalidamos la selección
+    if (this.turno.clienteId) {
+      const clienteActual = this.clientes.find(c => c.usuario_id === this.turno.clienteId);
+      const textoActual = clienteActual
+        ? `${clienteActual.nombre} ${clienteActual.apellido} (${clienteActual.email})`
+        : '';
+      if (textoActual !== this.busquedaCliente) {
+        this.turno.clienteId = '';
+      }
+    }
+  }
+
+  seleccionarCliente(cliente: any) {
+    this.turno.clienteId = cliente.usuario_id;
+    this.busquedaCliente = `${cliente.nombre} ${cliente.apellido} (${cliente.email})`;
+    this.mostrarDropdown = false;
+  }
+
+  /** Delay para que el click en un item del dropdown se registre antes de ocultarlo por el blur */
+  ocultarDropdownConDelay() {
+    setTimeout(() => this.mostrarDropdown = false, 200);
+  }
+
+  irACrearUsuario() {
+    this.mostrarDropdown = false;
+    const texto = this.busquedaCliente.trim();
+    const esEmail = texto.includes('@');
+
+    const queryParams: any = { returnUrl: this.router.url.split('?')[0] };
+
+    if (esEmail) {
+      queryParams.email = texto;
+    } else {
+      const partes = texto.split(' ').filter(p => p);
+      queryParams.nombre = partes[0] || '';
+      queryParams.apellido = partes.slice(1).join(' ') || '';
+    }
+
+    this.router.navigate(['/admin/usuarios/crear'], { queryParams });
   }
 
   guardar() {

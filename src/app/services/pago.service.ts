@@ -76,4 +76,10 @@ export class PagoService {
       })
     );
   }
+  /**
+   * Envía a validar un pago exitoso de MercadoPago
+   */
+  confirmarPagoMp(datosPago: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/confirmar`, datosPago);
+  }
 }
