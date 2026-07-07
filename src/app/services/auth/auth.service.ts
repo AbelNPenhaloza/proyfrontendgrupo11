@@ -4,12 +4,13 @@ import { Observable, tap } from 'rxjs';
 import { LoginModel } from '../../models/auth/login.model';
 import { RegisterModel } from '../../models/auth/register.model';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private readonly API_URL = 'http://localhost:3000/api/auth';
+  private readonly API_URL = `${environment.API_BASE_URL}/auth`;
 
   login(credentials: LoginModel): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, credentials).pipe(
