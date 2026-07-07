@@ -4,6 +4,12 @@
     
     @if (isClienteLoggedIn()) {
       <div class="ms-auto d-flex align-items-center">
+        
+        <!-- Botón Mágico IA -->
+        <button class="btn btn-warning rounded-pill px-3 py-1 me-3 shadow-sm border-0 fw-bold" routerLink="/cliente/ia" style="background: linear-gradient(45deg, #f39c12, #f1c40f); color: #14213D;">
+          <i class="bi bi-magic me-1"></i> Look con IA
+        </button>
+
         <div class="dropdown">
           <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown">
             <i class="bi bi-person-circle fs-4"></i>

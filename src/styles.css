@@ -1,10 +1,20 @@
+/* ========================================================
+   TIPOGRAFÍAS DEL MANUAL DE MARCA (VÍA NUBE)
+   Estilo Barber's Hand -> Rye
+   Estilo Gentlemans Club -> Montserrat
+   ======================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Rye&display=swap');
+
 :root {
+  /* PALETA 1 DEL MANUAL DE MARCA */
   --primary-color: #A8201A;    /* Rojo Tradición */
   --secondary-color: #14213D;  /* Azul Moderno */
   --light-bg: #F4F1DE;         /* Crema Suave */
   --accent-brown: #5C3D2E;     /* Marrón Barbería */
-  --font-title: 'Cinzel', serif;
-  --font-body: 'Inter', sans-serif;
+  
+  /* TIPOGRAFÍA OFICIAL */
+  --font-title: 'Rye', 'Cinzel', serif;
+  --font-body: 'Montserrat', 'Inter', sans-serif;
 }
 
 body {
