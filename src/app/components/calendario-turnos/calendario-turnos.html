@@ -12,7 +12,6 @@
         Elegí un servicio para ver los horarios disponibles de nuestros profesionales.
       </p>
     </div>
-
     <!-- Alertas con estilo unificado -->
     @if (mensajeExito) {
       <div class="alert alert-success alert-dismissible fade show shadow border-0 rounded-4 mb-4 p-4" role="alert" style="background-color: #ffffff; border-left: 6px solid #14213D; color: #14213D;">
@@ -106,6 +105,33 @@
       </div>
 
     </div>
+    
+    <!-- ==============================================
+         BANNER GIGANTE DE INTELIGENCIA ARTIFICIAL
+         ============================================== -->
+    <div class="row justify-content-center mt-5 mb-3">
+      <div class="col-12 text-center">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden position-relative" style="background: linear-gradient(135deg, #14213D 0%, #0d162a 100%); border-left: 8px solid #f39c12 !important;">
+          <!-- Fondo decorativo -->
+          <i class="bi bi-robot position-absolute opacity-10" style="font-size: 8rem; right: -20px; top: -30px; color: #f39c12; transform: rotate(15deg);"></i>
+          
+          <div class="card-body p-4 p-md-5 d-flex flex-column flex-md-row align-items-center justify-content-between position-relative z-1">
+            <div class="text-md-start mb-4 mb-md-0 text-white me-md-4">
+              <h2 class="fw-bold mb-2 text-warning brand-font text-uppercase" style="letter-spacing: 1px;">
+                <i class="bi bi-stars me-2"></i>¿No sabes qué pedir?
+              </h2>
+              <p class="mb-0 fs-5 text-light opacity-75" style="font-family: var(--font-body);">
+                Probá nuestra nueva Inteligencia Artificial. Analiza tu rostro en vivo y te recomienda cortes con instrucciones precisas para el barbero.
+              </p>
+            </div>
+            <button class="btn btn-warning btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg text-nowrap d-flex align-items-center justify-content-center" routerLink="/cliente/ia" style="color: #14213D; font-family: var(--font-body); font-size: 1.1rem; border: 2px solid #f1c40f;">
+              <i class="bi bi-camera-fill fs-4 me-2"></i> ¡Escanear mi rostro!
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

@@ -38,6 +38,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./components/calendario-turnos/calendario-turnos').then(m => m.CalendarioTurnos)
   },
+  {
+    path: 'cliente/ia',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/cliente/recomendacion-ia/recomendacion-ia').then(m => m.RecomendacionIa)
+  },
 
   // Rutas protegidas (Solo usuarios logueados pueden ver esto)
   {
