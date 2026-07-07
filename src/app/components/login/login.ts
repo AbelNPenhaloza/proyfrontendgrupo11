@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
-
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule, RouterLink],
@@ -15,6 +15,7 @@ export class Login {
   private router = inject(Router);
 
   errorMessage = signal<string | null>(null);
+  googleAuthUrl = `${environment.API_BASE_URL}/auth/google`;
 
   constructor() {
     // Si ya existe una sesión, redirigir según el rol
