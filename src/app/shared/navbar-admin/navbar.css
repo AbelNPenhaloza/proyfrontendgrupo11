@@ -1,6 +1,6 @@
 /* Base: Mobile-first */
 .navbar {
-  background-color: #14213D;
+  background-color: var(--secondary-color);
   padding: 0.25rem 0.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   z-index: 1030;
@@ -9,7 +9,7 @@
 .navbar-brand {
   font-size: 1rem;
   font-weight: 700;
-  color: #F4F1DE;
+  color: var(--light-bg);
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -18,7 +18,7 @@
 }
 
 .navbar-brand i {
-  color: #A8201A;
+  color: var(--primary-color);
   font-size: 1.2rem;
 }
 
@@ -28,7 +28,7 @@
   border-radius: 5px;
   transition: all 0.2s ease;
   margin: 1px 0;
-  color: #F4F1DE;
+  color: var(--light-bg);
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -40,7 +40,7 @@
 }
 
 .nav-link.active {
-  background-color: #A8201A;
+  background-color: var(--primary-color);
   color: #fff !important;
   font-weight: 600;
 }
@@ -66,7 +66,7 @@
 
 .navbar-collapse {
   padding: 0.5rem 0;
-  background-color: #14213D;
+  background-color: var(--secondary-color);
   border-radius: 0 0 8px 8px;
 }
 

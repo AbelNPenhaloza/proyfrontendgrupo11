@@ -6,7 +6,7 @@
 }
 
 .dashboard-header h2 {
-  color: #1a1a2e;
+  color: var(--secondary-color);
   font-size: 1.4rem;
 }
 
