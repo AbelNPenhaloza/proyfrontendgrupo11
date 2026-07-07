@@ -1,13 +1,13 @@
 import { Component, ViewChild, ElementRef, inject, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-recomendacion-ia',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './recomendacion-ia.html',
   styleUrl: './recomendacion-ia.css'
 })
@@ -109,10 +109,6 @@ export class RecomendacionIa implements OnDestroy {
     this.estado = 'INICIO';
     this.fotoBase64 = null;
     this.resultados = [];
-  }
-
-  reservar() {
-    this.router.navigate(['/cliente/turnos']);
   }
 
   ngOnDestroy() {
