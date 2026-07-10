@@ -17,12 +17,6 @@ export class App {
   private readonly router = inject(Router);
   protected readonly title = signal('frontend');
 
-  constructor() {
-    if (!this.authService.isAuthenticated()) {
-      localStorage.removeItem('role');
-    }
-  }
-
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
