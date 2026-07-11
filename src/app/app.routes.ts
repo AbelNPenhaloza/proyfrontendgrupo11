@@ -1,0 +1,143 @@
+import { Routes } from '@angular/router';
+import { BarberoPerfil } from './components/barbero/barbero-perfil/barbero-perfil';
+import { authGuard } from './guards/auth.guard'; // Importas tu guardia
+
+export const routes: Routes = [
+  // Rutas públicas
+  {
+    path: 'login',
+    loadComponent: () => import('./components/login/login').then(m => m.Login)
+  },
+  {
+    path: 'auth/google',
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
+  },
+  { path: 'pago/exitoso', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  { path: 'pago/fallido', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  { path: 'pago/pendiente', loadComponent: () => import('./components/pago/pago').then(m => m.Pago) },
+  {
+    path: 'formulario',
+    loadComponent: () => import('./components/formulario-inscripcion/formulario-inscripcion').then(m => m.FormularioInscripcion)
+  },
+  {
+    path: 'auth/google',
+    loadComponent: () => import('./components/google-callback/google-callback').then(m => m.GoogleCallback)
+  },
+  {
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/home/home').then(m => m.Home)
+  },
+  {
+    path: 'perfil',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/perfil/perfil').then(m => m.Perfil)
+  },
+  {
+    path: 'cliente/turnos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/calendario-turnos/calendario-turnos').then(m => m.CalendarioTurnos)
+  },
+  {
+    path: 'cliente/ia',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/cliente/recomendacion-ia/recomendacion-ia').then(m => m.RecomendacionIa)
+  },
+
+  // Rutas protegidas (Solo usuarios logueados pueden ver esto)
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./components/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard)
+      },
+      {
+        path: 'turnos',
+        loadComponent: () => import('./components/admin/turnos-table/turnos-table').then(m => m.TurnosTable)
+      },
+      {
+        path: 'turnos/crear',
+        loadComponent: () => import('./components/admin/turno-form/turno-form').then(m => m.TurnoForm)
+      },
+      {
+        path: 'turnos/editar/:id',
+        loadComponent: () => import('./components/admin/turno-form/turno-form').then(m => m.TurnoForm)
+      },
+      {
+        path: 'pagos',
+        loadComponent: () => import('./components/admin/pagos-table/pagos-table').then(m => m.PagosTable)
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () => import('./components/admin/usuarios-table/usuarios-table').then(m => m.UsuariosTable)
+      },
+      {
+        path: 'usuarios/crear',
+        loadComponent: () => import('./components/admin/usuario-form/usuario-form').then(m => m.UsuarioForm)
+      },
+      {
+        path: 'usuarios/editar/:id',
+        loadComponent: () => import('./components/admin/usuario-form/usuario-form').then(m => m.UsuarioForm)
+      },
+      {
+        path: 'barberos',
+        loadComponent: () => import('./components/admin/barberos-table/barberos-table').then(m => m.BarberosTable)
+      },
+      {
+        path: 'barberos/crear',
+        loadComponent: () => import('./components/admin/barbero-form/barbero-form').then(m => m.BarberoForm)
+      },
+      {
+        path: 'barberos/editar/:id',
+        loadComponent: () => import('./components/admin/barbero-form/barbero-form').then(m => m.BarberoForm)
+      },
+      {
+        path: 'servicios',
+        loadComponent: () => import('./components/admin/servicios-table/servicios-table').then(m => m.ServiciosTable)
+      },
+      {
+        path: 'servicios/crear',
+        loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm)
+      },
+      {
+        path: 'servicios/editar/:id',
+        loadComponent: () => import('./components/admin/servicio-form/servicio-form').then(m => m.ServicioForm)
+      },
+      {
+        path: 'auditoria',
+        loadComponent: () => import('./components/admin/auditoria-table/auditoria-table').then(m => m.AuditoriaTable)
+      },
+    ]
+  },
+  // Rutas del barbero
+  {
+    path: 'barbero',
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./components/barbero/barbero-dashboard/barbero-dashboard').then(m => m.BarberosDashboard)
+      },
+      {
+        path: 'agenda',
+        loadComponent: () => import('./components/barbero/barbero-agenda/barbero-agenda').then(m => m.BarberoAgenda)
+      },
+      {
+        path: 'disponibilidad',
+        loadComponent: () => import('./components/barbero/barbero-disponibilidad/barbero-disponibilidad').then(m => m.BarberoDisponibilidad)
+      },
+      {
+        path: 'perfil',
+        component: BarberoPerfil
+      },
+    ]
+  },
+
+  // Redirección por defecto
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
+];

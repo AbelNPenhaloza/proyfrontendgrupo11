@@ -1,0 +1,88 @@
+/* Base: Mobile-first */
+.table-container {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.table-container h4 {
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+
+.table thead th {
+  border: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  font-size: 0.85rem;
+}
+
+.acciones-col {
+  text-align: center;
+  width: 100px;
+}
+
+.acciones-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.acciones-cell .btn {
+  min-height: 40px;
+  min-width: 40px;
+  padding: 0.25rem 0.5rem;
+}
+
+.export-buttons .btn {
+  border-radius: 6px;
+  font-size: 0.8rem;
+  min-height: 40px;
+}
+
+/* Tablet: min-width 768px */
+@media (min-width: 768px) {
+  .table-container {
+    padding: 1.5rem;
+  }
+
+  .table-container h4 {
+    font-size: 1.25rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .table thead th {
+    font-size: 0.85rem;
+  }
+
+  .table tbody td {
+    font-size: 0.9rem;
+  }
+
+  .acciones-col {
+    width: 120px;
+  }
+
+  .acciones-cell .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .export-buttons .btn {
+    min-height: 44px;
+  }
+}

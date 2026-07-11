@@ -1,0 +1,11 @@
+nav {
+  background-color: var(--secondary-color) !important;
+}
+
+.nav-link {
+  color: var(--light-bg) !important;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary-color) !important;
+}

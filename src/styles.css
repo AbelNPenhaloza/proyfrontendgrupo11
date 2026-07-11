@@ -1,0 +1,146 @@
+/* ========================================================
+   TIPOGRAFÍAS DEL MANUAL DE MARCA (VÍA NUBE)
+   Estilo Barber's Hand -> Rye
+   Estilo Gentlemans Club -> Montserrat
+   ======================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Rye&display=swap');
+
+:root {
+  /* PALETA 1 DEL MANUAL DE MARCA */
+  --primary-color: #A8201A;    /* Rojo Tradición */
+  --primary-color-hover: #8c1a15;
+  --secondary-color: #14213D;  /* Azul Moderno */
+  --light-bg: #F4F1DE;         /* Crema Suave */
+  --accent-brown: #5C3D2E;     /* Marrón Barbería */
+  --danger-color: #A8201A;     /* Reservado para acciones destructivas */
+  --danger-color-hover: #8c1a15;
+  --border-subtle: rgba(92, 61, 46, 0.15);
+  --surface: #ffffff;
+
+  /* TIPOGRAFÍA OFICIAL */
+  --font-title: 'Rye', 'Cinzel', serif;
+  --font-body: 'Montserrat', 'Inter', sans-serif;
+
+  /* SUPERFICIES Y MOVIMIENTO */
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 4px 16px rgba(20, 33, 61, 0.10);
+  --shadow-card-hover: 0 8px 24px rgba(20, 33, 61, 0.16);
+  --transition-fast: 180ms ease;
+}
+
+body {
+  background-color: var(--light-bg);
+  color: var(--secondary-color);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6, .brand-font {
+  font-family: var(--font-title);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color-hover) !important;
+  border-color: var(--primary-color-hover) !important;
+  transform: translateY(-1px);
+}
+
+.btn-secondary,
+.btn-outline-dark,
+.btn-outline-secondary {
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.btn-outline-dark {
+  color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--secondary-color);
+  color: var(--light-bg);
+  transform: translateY(-1px);
+}
+
+/* Botón destructivo: reservado solo para acciones de baja/cierre de sesión */
+.btn-danger,
+.btn-outline-danger {
+  transition: all var(--transition-fast);
+}
+
+.btn-danger:hover,
+.btn-outline-danger:hover {
+  transform: translateY(-1px);
+}
+
+.navbar {
+  background-color: var(--secondary-color) !important;
+  font-family: var(--font-body);
+}
+
+.card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card-header {
+  font-family: var(--font-body);
+  border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+}
+
+/* ========================================================
+   ANIMACIONES Y TRANSICIONES GLOBALES
+   ======================================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-content > * {
+  animation: fadeInUp 220ms ease both;
+}
+
+.dropdown-menu {
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.dropdown-menu.show {
+  animation: fadeInUp 160ms ease both;
+}
+
+.nav-link {
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-content > *,
+  .dropdown-menu.show,
+  .card,
+  .btn-primary,
+  .btn-outline-dark,
+  .nav-link {
+    animation: none !important;
+    transition: none !important;
+  }
+}

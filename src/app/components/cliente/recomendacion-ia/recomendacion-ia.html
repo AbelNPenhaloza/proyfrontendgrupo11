@@ -1,0 +1,112 @@
+<div class="container py-5">
+  <div class="card shadow-lg mx-auto" style="max-width: 600px; background-color: var(--light-bg); border-color: var(--accent-brown);">
+    <div class="card-body text-center p-5">
+      
+      <h2 class="brand-font mb-4 text-uppercase" style="color: var(--secondary-color);">
+        <i class="bi bi-magic text-warning me-2"></i>Recomendación con IA
+      </h2>
+
+      <!-- PANTALLA INICIO -->
+      @if (estado === 'INICIO') {
+        <div class="alert alert-info border-0 rounded-3 text-start small mb-4 shadow-sm" style="background-color: rgba(20, 33, 61, 0.05); color: var(--secondary-color);">
+          <i class="bi bi-shield-lock-fill me-2 text-success"></i>
+          <strong>Privacidad:</strong> Esta función utiliza tecnología externa (Google Gemini). Al continuar, das permiso para activar tu cámara. La foto se procesará de forma temporal para generarte recomendaciones y <strong>no se almacenará</strong> en nuestros servidores.
+        </div>
+        <p class="mb-4">Descubre qué corte te queda mejor usando Inteligencia Artificial. ¡Mírate antes de cortarte!</p>
+        
+        <div class="d-flex flex-column gap-3 align-items-center">
+          <!-- Opcion A: Camara -->
+          <button class="btn btn-primary btn-lg px-5 py-3 rounded-pill text-uppercase tracking-wider shadow w-100" style="max-width: 300px; background-color: var(--primary-color); border:none;" (click)="activarCamara()">
+            <i class="bi bi-camera-fill me-2"></i> Activar Cámara
+          </button>
+          
+          <div class="text-muted small my-1">- o si no tienes cámara -</div>
+          
+          <!-- Opcion B: Archivo -->
+          <button class="btn btn-outline-secondary rounded-pill px-4" style="max-width: 300px;" (click)="fileInput.click()">
+            <i class="bi bi-upload me-2"></i> Subir foto del rostro
+          </button>
+          <input type="file" #fileInput accept="image/*" style="display: none;" (change)="subirFoto($event)">
+        </div>
+      }
+
+      <!-- PANTALLA CÁMARA -->
+      @if (estado === 'CAMARA') {
+        <div class="position-relative d-inline-block rounded-4 overflow-hidden shadow-lg border border-3 mb-4" style="border-color: var(--secondary-color);">
+          <video #videoElement width="100%" height="auto" autoplay playsinline style="transform: scaleX(-1); max-width: 400px; display: block;"></video>
+          
+          <!-- Guias de rostro -->
+          <div class="position-absolute top-50 start-50 translate-middle border border-2 border-white rounded-circle" style="width: 200px; height: 250px; opacity: 0.5; pointer-events: none;"></div>
+        </div>
+        
+        <div>
+          <button class="btn btn-primary btn-lg rounded-pill shadow px-5" (click)="tomarFoto()" style="background-color: var(--primary-color);">
+            <i class="bi bi-camera me-2"></i> Tomar Foto
+          </button>
+        </div>
+      }
+
+      <!-- PANTALLA PROCESANDO -->
+      @if (estado === 'PROCESANDO') {
+        <div class="py-5">
+          <div class="spinner-border text-danger" role="status" style="width: 3rem; height: 3rem; color: var(--primary-color) !important;">
+            <span class="visually-hidden">Procesando...</span>
+          </div>
+          <h4 class="mt-4 mb-2" style="color: var(--secondary-color);">La IA está analizando tus facciones...</h4>
+          <p class="text-muted small">Aplicando magia de Google Gemini y renderizando cortes.</p>
+        </div>
+      }
+
+      <!-- PANTALLA ERROR -->
+      @if (estado === 'ERROR') {
+        <div class="alert alert-danger shadow-sm border-0 mb-4">
+          <i class="bi bi-exclamation-triangle-fill fs-4 d-block mb-2"></i>
+          {{ mensajeError }}
+        </div>
+        <button class="btn btn-outline-dark rounded-pill px-4" (click)="reintentar()">Reintentar</button>
+      }
+
+      <!-- PANTALLA RESULTADO -->
+      @if (estado === 'RESULTADO') {
+        <h4 class="mb-4 brand-font text-success">¡Tus looks recomendados!</h4>
+        
+        <div id="iaCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden mb-4 border" data-bs-ride="false" style="border-color: var(--accent-brown);">
+          <div class="carousel-inner">
+            @for (corte of resultados; track $index) {
+              <div class="carousel-item" [class.active]="$index === 0">
+                <img [src]="'data:image/png;base64,' + corte.base64" class="d-block w-100" style="height: 400px; object-fit: cover; object-position: center;" alt="Corte Recomendado">
+                <div class="carousel-caption d-block p-3" style="background: rgba(20, 33, 61, 0.9); bottom: 0; left: 0; right: 0;">
+                  <h5 class="mb-1 text-warning text-uppercase tracking-wider" style="font-family: var(--font-body); font-weight: 700;">
+                    {{ corte.estilo }}
+                  </h5>
+                  <p class="mb-0 text-white small fst-italic" style="font-size: 0.85rem; line-height: 1.2;">
+                    <i class="bi bi-info-circle-fill me-1 text-warning"></i> {{ corte.descripcion || 'Mostrando sugerencia con IA' }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#iaCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#iaCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3">
+          <button class="btn btn-outline-dark rounded-pill" (click)="reintentar()">
+            <i class="bi bi-arrow-counterclockwise"></i> Otra vez
+          </button>
+          <button class="btn btn-primary rounded-pill px-4 shadow" routerLink="/cliente/reserva" style="background-color: var(--secondary-color); border-color: var(--secondary-color);">
+            <i class="bi bi-house-door me-2"></i> Volver al inicio
+          </button>
+        </div>
+      }
+
+      <!-- Elemento Canvas Oculto para capturar la foto -->
+      <canvas #canvasElement style="display: none;"></canvas>
+
+    </div>
+  </div>
+</div>

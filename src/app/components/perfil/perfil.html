@@ -1,0 +1,47 @@
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h3>Mi Perfil</h3>
+    <form [formGroup]="perfilForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input formControlName="nombre" class="form-control" type="text">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Apellido</label>
+        <input formControlName="apellido" class="form-control" type="text">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input formControlName="email" class="form-control" type="email">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Contraseña</label>
+
+        <div class="input-group">
+          <input
+            formControlName="password"
+            class="form-control"
+            [type]="mostrarPassword ? 'text' : 'password'">
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="togglePassword()">
+
+            <i class="bi"
+              [ngClass]="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'">
+            </i>
+
+          </button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Celular</label>
+        <input formControlName="celular" class="form-control" type="text">
+      </div>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="perfilForm.invalid">
+        Guardar Cambios
+      </button>
+    </form>
+  </div>
+</div>

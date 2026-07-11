@@ -1,0 +1,49 @@
+.main-content {
+  min-height: calc(100vh - 100px);
+  background-color: var(--light-bg);
+}
+
+/* Navbar de invitados (no logueados): mismo tratamiento de marca que el resto de la app */
+.navbar-guest {
+  background-color: var(--secondary-color) !important;
+  border-bottom: 3px solid var(--primary-color);
+}
+
+.navbar-guest .navbar-brand {
+  color: var(--light-bg) !important;
+  font-family: var(--font-title);
+}
+
+.navbar-guest .nav-link {
+  color: var(--light-bg) !important;
+}
+
+.navbar-guest .nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Navbar de clientes logueados */
+.navbar-cliente-brand {
+  background-color: var(--secondary-color);
+  border-bottom: 3px solid var(--primary-color);
+}
+
+.navbar-cliente-brand .navbar-brand,
+.navbar-cliente-brand .nav-link {
+  color: var(--light-bg) !important;
+}
+
+.navbar-cliente-brand .nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.navbar-cliente-brand .btn-logout {
+  background-color: var(--primary-color);
+  border: none;
+  transition: all var(--transition-fast);
+}
+
+.navbar-cliente-brand .btn-logout:hover {
+  background-color: var(--primary-color-hover);
+  transform: translateY(-1px);
+}
